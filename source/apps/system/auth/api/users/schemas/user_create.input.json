@@ -1,0 +1,16 @@
+{
+    "title": "InputSystemAuthUserCreate",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "username": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "fullname": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "email": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "password": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "language": { "type": "string", "minLength": 2, "maxLength": 2 },
+        "country": { "type": "string"},
+        "timezone": { "type": "string"},
+        "enabled": { "type": "string"}
+    },
+    "required": ["username", "fullname", "email", "password"]
+}

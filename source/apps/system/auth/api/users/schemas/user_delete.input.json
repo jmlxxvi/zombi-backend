@@ -1,0 +1,5 @@
+{
+    "title": "InputSystemAuthUserDelete",
+    "type": "string",
+    "format": "uuid"
+}

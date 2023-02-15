@@ -1,0 +1,5 @@
+{
+    "title": "InputSystemAuthUserById",
+    "type": "string",
+    "format": "uuid"
+}

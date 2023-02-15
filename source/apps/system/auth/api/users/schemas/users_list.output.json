@@ -1,0 +1,30 @@
+{
+    "title": "OutputSystemAuthUsersList",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "count": { "type": "number" },
+        "rows": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "id": { "type": "string", "formtat": "uuid" },
+                    "username": { "type": "string" },
+                    "fullname": { "type": "string" },
+                    "email": { "type": "string" },
+                    "timezone": { "type": "string"},
+                    "country": { "type": "string"},
+                    "language": { "type": "string" },
+                    "country_text": { "type": "string"},
+                    "language_text": { "type": "string" },
+                    "enabled": { "type": "string"}
+                },
+                "required": ["id", "username", "fullname", "email", "password"]
+            }
+        }
+    },
+    "required": ["count", "rows"]
+}
+  

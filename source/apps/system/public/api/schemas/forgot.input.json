@@ -1,0 +1,9 @@
+{
+    "title": "InputSystemPublicForgot",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "email": { "type": "string" }
+    },
+    "required": ["email"]
+}

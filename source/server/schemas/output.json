@@ -1,0 +1,61 @@
+{
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "origin": {
+            "type": "string"
+        },
+        "status": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "error": {
+                    "type": "boolean"
+                },
+                "code": {
+                    "type": "number"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "number"
+                },
+                "elapsed": {
+                    "type": "number"
+                },
+                "request_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "executor": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            "required": [
+                "error",
+                "code",
+                "timestamp",
+                "elapsed",
+                "request_id",
+                "executor"
+            ]
+        },
+        "data": {
+            "anyOf": [
+                { "type": "number" },
+                { "type": "string" },
+                { "type": "boolean" },
+                { "type": "array" },
+                { "type": "object" },
+                { "type": "null" }
+            ]
+        }
+    },
+    "required": [
+        "origin",
+        "status",
+        "data"
+    ]
+}

@@ -1,0 +1,5 @@
+{
+    "title": "InputSystemAuthUserToggle",
+    "type": "string",
+    "format": "uuid"
+}

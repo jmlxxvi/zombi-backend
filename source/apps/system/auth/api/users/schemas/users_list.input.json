@@ -1,0 +1,13 @@
+{
+    "title": "InputSystemAuthUsersList",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "search": { "type": "string", "minLength": 0, "maxLength": 256 },
+        "order_col": { "type": "number" },
+        "order_dir": { "type": "string" },
+        "page": { "type": "number" },
+        "size": { "type": "number" }
+    },
+    "required": ["page"]
+}

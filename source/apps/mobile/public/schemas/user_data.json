@@ -1,0 +1,38 @@
+{
+    "title": "Zombi Infra System Public User Data",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "id": { "type": "string" },
+        "username": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+        },
+        "fullname": { "type": "string" },
+        "email": { "type": "string" },
+        "password": { "type": "string" },
+        "timezone": { "type": "string" },
+        "country": { "type": "string" },
+        "language": { "type": "string" },
+        "enabled": { "type": "string" },
+        "created_by": { "type": "string" },
+        "created_ts": { "type": "number" },
+        "password_recovery_token": { "type": ["string", "null"] },
+        "password_recovery_ts": { "type": ["number", "null"] }
+    },
+    "required": [
+        "id",
+        "username",
+        "fullname",
+        "email",
+        "password",
+        "timezone",
+        "country",
+        "language",
+        "enabled",
+        "created_by",
+        "created_ts",
+        "password_recovery_ts"
+    ]
+}

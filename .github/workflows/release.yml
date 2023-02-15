@@ -1,0 +1,18 @@
+name: Notify Release
+
+on:
+  release:
+    types: [published]
+
+env:
+  ZOMBI_ENV: ${{ secrets.LOCAL_SECRETS }}
+
+jobs:
+  slack-message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Creates the environment file
+        run: mkdir .env ; printf "%s" "$ZOMBI_ENV" > ".env/local"
+      - name: Slack Message
+        run: |
+          . .env/local ; curl -X POST -H 'Content-type: application/json' --data '{ "text": "New Release ${{ github.event.release.tag_name }}, <${{ github.event.release.html_url }}|check it out>" }' $ZOMBI_SLACK_WEBHOOK_URL

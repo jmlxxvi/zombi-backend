@@ -1,0 +1,40 @@
+{
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "request_id": {
+            "type": "string",
+            "minLength": 36,
+            "maxLength": 36
+        },
+        "token": {
+            "type": "string",
+            "minLength": 128,
+            "maxLength": 128
+        },
+        "mod": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9-_/]+$"
+        },
+        "fun": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9-_]+$"
+        },
+        "args": {
+            "anyOf": [
+                { "type": "number" },
+                { "type": "string" },
+                { "type": "boolean" },
+                { "type": "array" },
+                { "type": "object" },
+                { "type": "null" }
+            ]
+        }
+    },
+    "required": [
+        "mod",
+        "fun"
+    ]
+}

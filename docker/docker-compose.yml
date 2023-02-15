@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+    db:
+        image: "postgres:14"
+        container_name: postgres
+        restart: unless-stopped
+        environment:
+            POSTGRES_USER: "postgres"
+            POSTGRES_PASSWORD: "postgres"
+            POSTGRES_DB: "postgres"
+        ports:
+            - 15432:5432
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+
+    redis:
+        image: "redis:6"
+        container_name: redis
+        restart: unless-stopped
+        command:
+            - /bin/sh
+            - -c
+            - redis-server --requirepass "redispass"
+        volumes:
+            - redis:/var/lib/redis/data
+            - ./redis.conf:/usr/local/etc/redis/redis.conf
+        ports:
+            - 16379:6379
+volumes:
+    redis:
+    pgdata:
+

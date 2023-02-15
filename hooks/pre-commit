@@ -1,0 +1,29 @@
+#!/bin/sh
+
+echo "-----------------------\nRunning pre-commit hook\n-----------------------"
+
+. ./.env/local
+
+npm run schemas
+ERROR=$?
+[ ${ERROR} -ne 0 ] && echo "---------------------------------------------\nAUDIT: Pre-commit hook failed, commit ommited\n---------------------------------------------" && exit 1
+
+npm audit --audit-level high
+ERROR=$?
+[ ${ERROR} -ne 0 ] && echo "---------------------------------------------\nAUDIT: Pre-commit hook failed, commit ommited\n---------------------------------------------" && exit 1
+
+npm run lint
+ERROR=$?
+[ ${ERROR} -ne 0 ] && echo "--------------------------------------------\nLINT: Pre-commit hook failed, commit ommited\n--------------------------------------------" && exit 1
+
+npm run test
+ERROR=$?
+[ ${ERROR} -ne 0 ] && echo "--------------------------------------------\nTEST UNIT: Pre-commit hook failed, commit ommited\n--------------------------------------------" && exit 1
+
+npm run test:core
+ERROR=$?
+[ ${ERROR} -ne 0 ] && echo "--------------------------------------------\nTEST INFRA: Pre-commit hook failed, commit ommited\n--------------------------------------------" && exit 1
+
+echo "----------------------\nEnd of pre-commit hook\n----------------------"
+
+exit 0

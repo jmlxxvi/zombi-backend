@@ -1,0 +1,10 @@
+{
+    "entryPoints": ["./source"],
+    "exclude": [
+      "**/*.js",
+      "**/node_modules/**"
+    ],
+    "out": "./docs/typedoc",
+    "tsconfig": "tsconfig.json",
+    "entryPointStrategy": "expand"
+}

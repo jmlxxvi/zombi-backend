@@ -1,0 +1,14 @@
+{
+    "title": "OutputSystemPublicLogin",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "fullname": { "type": "string" },
+        "email": { "type": "string" },
+        "token": { "type": "string" },
+        "timezone": { "type": "string" },
+        "i18n": { "type": "object" }
+    },
+    "required": ["fullname", "email", "token", "timezone", "i18n"]
+}
+
