@@ -1,6 +1,6 @@
 [ -z "${ZOMBI_DB_URL}" ] && echo "Environment not set!" && exit 1
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+# SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # To run locally (without Docker)
 # BIN=${SCRIPT_DIR}/bin/dbmate
