@@ -99,6 +99,6 @@ jobs:
         #   cd migrations
         #   sudo -E ./migrations.sh migrate
         #   cd ..
-        run: ssh -i ./tunnel_key ${{ secrets.BASTION_HOST }} -C 'export ZOMBI_DB_URL="${{ secrets.ZOMBI_DB_URL }}"; rm -rf zombi-backend; git clone https://github.com/jmlxxvi/zombi-backend.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate'
+        run: ssh -v -i ./tunnel_key ec2-user@${{ secrets.BASTION_HOST }} -C 'export ZOMBI_DB_URL="${{ secrets.ZOMBI_DB_URL }}"; rm -rf zombi-backend; git clone https://github.com/jmlxxvi/zombi-backend.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate'
       - name: Deploying code for lambdas
         run: bash ./deploy.sh
