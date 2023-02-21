@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - "*"
-      - "!master"
+      # - "!master"
 
 env:
   CI: true
@@ -13,6 +13,7 @@ env:
 
 jobs:
   testing_job:
+    environment: local
     # if: ${{ false }}
     runs-on: ubuntu-20.04
     env:
@@ -52,6 +53,7 @@ jobs:
       - name: Run tests
         run: . .env/local ; npm run test
   deploy_job:
+    environment: development
     # if: ${{ false }}
     needs: testing_job
     runs-on: ubuntu-latest
@@ -70,5 +72,18 @@ jobs:
           node-version: 18.x
       - name: Install dependencies
         run: npm i
-      - name: Deploying code for lambda MICROSERVER
+      - name: "Stablish SSH tunnel to DB via bastion host"
+        # run: echo "${{ secrets.BASTION_SSH_KEY }}" | tr -d '\r' > key.pem; chmod 400 key.pem
+        run: |
+          mkdir ~/.ssh
+          ssh-keyscan -H ${{secrets.BASTION_HOST}} >> ~/.ssh/known_hosts
+          eval `ssh-agent -s`
+          ssh-add - <<< "${{secrets.BASTION_SSH_KEY}}"
+          ssh -fN -v -L 5432:${{secrets.DB_HOST}}:5432 ec2_user@${{secrets.BASTION_HOST}}
+      - name: "Run DB migrations"
+        # run: ssh -i ec2-key-dev.pem ec2-user@ec2-3-91-34-224.compute-1.amazonaws.com -C 'export ZOMBI_DB_URL="${{ secrets.ZOMBI_DB_URL }}"; rm -rf zombi-backend; git clone https://github.com/${{github.repository}}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate'
+        run: |
+          cd migrations
+          sudo -E ./migrations.sh migrate
+      - name: Deploying code for lambdas
         run: bash ./deploy.sh

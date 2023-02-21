@@ -603,8 +603,8 @@ export class ZombiInfraBackendStack extends Stack {
     }));
 
     ciUser.addToPolicy(new iam.PolicyStatement({
-      resources: [CodeBucket.bucketArn],
-      actions: ["s3:GetObject"],
+      resources: [`${CodeBucket.bucketArn}/*`],
+      actions: ["s3:GetObject", "s3:PutObject"],
     }));
 
     // Access Keys
