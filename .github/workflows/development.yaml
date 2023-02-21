@@ -17,7 +17,7 @@ jobs:
     # if: ${{ false }}
     runs-on: ubuntu-20.04
     env:
-      ZOMBI_ENV: ${{ secrets.LOCAL_ENV }}
+      LOCAL_ENV: ${{ secrets.LOCAL_ENV }}
     services:
       postgres:
         image: postgres:14
@@ -45,12 +45,14 @@ jobs:
         with:
           node-version: 18.x
       - name: Creates the environment file
-        run: mkdir .env ; printf "%s" "$ZOMBI_ENV" > ".env/local"
+        run: mkdir .env ; printf "%s" "$LOCAL_ENV" > ".env/local"
+      - run: cat .env/local
+      - run: ls ccccc
       - name: Install dependencies
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm i
-      - run: env | grep ZOMBI_DB_URL
+
       - name: "Run DB migrations"
         run: |
           cd migrations
