@@ -23,7 +23,7 @@ export DBMATE_NO_DUMP_SCHEMA=false
 export DBMATE_WAIT=true
 export DBMATE_WAIT_TIMEOUT=10s
 
-docker run --rm -it --network=host -v "$(pwd)/db:/db" \
+docker run --rm --network=host -v "$(pwd)/db:/db" \
     -e DATABASE_URL=${ZOMBI_DB_URL}?sslmode=disable \
     -e DBMATE_MIGRATIONS_DIR=${DBMATE_MIGRATIONS_DIR} \
     -e DBMATE_MIGRATIONS_TABLE=${DBMATE_MIGRATIONS_TABLE} \
