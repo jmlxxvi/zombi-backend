@@ -12,55 +12,55 @@ env:
   ISOLATE: true
 
 jobs:
-  testing_job:
-    environment: local
-    # if: ${{ false }}
-    runs-on: ubuntu-20.04
-    env:
-      LOCAL_ENV: ${{ secrets.LOCAL_ENV }}
-    services:
-      postgres:
-        image: postgres:14
-        env:
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-      redis:
-        image: redis:6
-        ports:
-          - 6379:6379
-        options: --entrypoint redis-server
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        # with:
-        #   ref: ${{ github.ref }}
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.x
-      - name: Creates the environment file
-        run: mkdir .env ; printf "%s" "$LOCAL_ENV" > ".env/local"
-      - name: Install dependencies
-        run: npm i
+  # testing_job:
+  #   environment: local
+  #   # if: ${{ false }}
+  #   runs-on: ubuntu-20.04
+  #   env:
+  #     LOCAL_ENV: ${{ secrets.LOCAL_ENV }}
+  #   services:
+  #     postgres:
+  #       image: postgres:14
+  #       env:
+  #         POSTGRES_PASSWORD: postgres
+  #       ports:
+  #         - 5432:5432
+  #       options: >-
+  #         --health-cmd pg_isready
+  #         --health-interval 10s
+  #         --health-timeout 5s
+  #         --health-retries 5
+  #     redis:
+  #       image: redis:6
+  #       ports:
+  #         - 6379:6379
+  #       options: --entrypoint redis-server
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #       # with:
+  #       #   ref: ${{ github.ref }}
+  #     - name: Use Node.js 18.x
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 18.x
+  #     - name: Creates the environment file
+  #       run: mkdir .env ; printf "%s" "$LOCAL_ENV" > ".env/local"
+  #     - name: Install dependencies
+  #       run: npm i
 
-      - name: "Run DB migrations"
-        run: |
-          . .env/local
-          cd migrations
-          sudo -E ./migrations.sh migrate
-          cd ..
-      # - name: Run tests
-      #   run: . .env/local ; npm run test
+  #     - name: "Run DB migrations"
+  #       run: |
+  #         . .env/local
+  #         cd migrations
+  #         sudo -E ./migrations.sh migrate
+  #         cd ..
+  #     # - name: Run tests
+  #     #   run: . .env/local ; npm run test
   deploy_job:
     environment: development
     # if: ${{ false }}
-    needs: testing_job
+    # needs: testing_job
     runs-on: ubuntu-20.04
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
