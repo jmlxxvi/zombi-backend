@@ -20,7 +20,7 @@ jobs:
       ZOMBI_ENV: ${{ secrets.LOCAL_ENV }}
     services:
       postgres:
-        image: postgres
+        image: postgres@14
         env:
           POSTGRES_PASSWORD: postgres
         ports:
@@ -31,7 +31,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       redis:
-        image: redis
+        image: redis@6
         ports:
           - 6379:6379
         options: --entrypoint redis-server
