@@ -20,9 +20,9 @@ jobs:
       ZOMBI_ENV: ${{ secrets.LOCAL_ENV }}
     services:
       postgres:
-        image: postgres
+        image: postgres:14
         env:
-          POSTGRES_PASSWORD: postgres:14
+          POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
         options: >-
