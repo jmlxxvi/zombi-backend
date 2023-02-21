@@ -17,6 +17,8 @@ export DBMATE_WAIT=true
 export DBMATE_WAIT_TIMEOUT=10s
 export DATABASE_URL=${ZOMBI_DB_URL}?sslmode=disable
 
+echo "Connecting to ${DATABASE_URL}"
+
 # To run locally (without Docker)
 BIN=./bin/dbmate
 # MIGRATIONS_DIR=${SCRIPT_DIR}/migrations
