@@ -46,15 +46,7 @@ jobs:
           node-version: 18.x
       - name: Creates the environment file
         run: mkdir .env ; printf "%s" "$LOCAL_ENV" > ".env/local"
-      # - uses: actions/upload-artifact@v3
-      #   name: Upload Artifact
-      #   with:
-      #     name: SecretsVariables
-      #     path: ".env/local"
-      # - run: ls ccccc
       - name: Install dependencies
-        # env:
-        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm i
 
       - name: "Run DB migrations"
