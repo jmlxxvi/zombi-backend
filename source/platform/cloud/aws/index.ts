@@ -1,57 +1,60 @@
-import AWS from "aws-sdk";
-import https from "https";
+// import AWS from "aws-sdk";
+// import https from "https";
 
 // https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/node-reusing-connections.html
-const agent = new https.Agent({
-    keepAlive: true, 
-    // Infinity is read as 50 sockets
-    maxSockets: Infinity
-});
+// const agent = new https.Agent({
+//     keepAlive: true, 
+//     // Infinity is read as 50 sockets
+//     maxSockets: Infinity
+// });
 
-AWS.config.update({
-    httpOptions: { agent },
-    region: process.env.AWS_DEFAULT_REGION
-});
+// AWS.config.update({
+//     httpOptions: { agent },
+//     region: process.env.AWS_DEFAULT_REGION
+// });
 
-const _create_ws_message = (domain_name: string, stage: string) => {
+import { ApiGatewayManagementApiClient, PostToConnectionCommand } from "@aws-sdk/client-apigatewaymanagementapi";
+import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
+import { STSClient, GetCallerIdentityCommand } from "@aws-sdk/client-sts";
 
-    const endpoint = `${domain_name}/${stage}`; //  https://8ge20yn1zj.execute-api.us-east-1.amazonaws.com/dev/@connections
+// TODO memoize this or call it once on module load
+export const getAWSAccountId = async (): Promise<string> => {
+    const response = await new STSClient({}).send(
+        new GetCallerIdentityCommand({}),
+    );
 
-    return new AWS.ApiGatewayManagementApi({
-        apiVersion: "2018-11-29",
-        endpoint,
-    });
+    return String(response.Account);
 };
+
+// const _create_ws_message = (domain_name: string, stage: string) => {
+
+//     const endpoint = `${domain_name}/${stage}`; //  https://8ge20yn1zj.execute-api.us-east-1.amazonaws.com/dev/@connections
+
+//     return new ApiGatewayManagementApiClient({
+//         apiVersion: "2018-11-29",
+//         endpoint,
+//     });
+// };
 
 const send_ws_message = async ({ domain_name, stage, connection_id, message }: { domain_name: string, stage: string, connection_id: string, message: string }) => {
 
-    const ws = _create_ws_message(domain_name, stage);
+    // const client = _create_ws_message(domain_name, stage);
 
-    const postParams = {
-        Data: message,
+    const endpoint = `https://${domain_name}/${stage}`; //  https://8ge20yn1zj.execute-api.us-east-1.amazonaws.com/dev/@connections
+
+    const client = new ApiGatewayManagementApiClient({
+        apiVersion: "2018-11-29",
+        endpoint,
+    });
+
+    const params = {
+        Data: Buffer.from(message),
         ConnectionId: connection_id,
     };
 
-    return ws.postToConnection(postParams).promise();
-};
+    const command = new PostToConnectionCommand(params);
 
-const dynamodb = () => {
-
-    return new AWS.DynamoDB.DocumentClient();
-
-};
-
-const sns = {
-
-    async publish(topic: string, message: string) {
-
-        const params = {
-            Message: message,
-            TopicArn: `arn:aws:sns:${AWS.config.region}:${process.env.AWS_DEFAULT_ACCOUNT}:${topic}`
-        };
-
-        return new AWS.SNS({apiVersion: "2010-03-31"}).publish(params).promise();
-    }
+    return client.send(command);
 };
 
 const sqs = {
@@ -88,25 +91,29 @@ const sqs = {
 
     async send_message(queue: string, message: string) {
 
+        const aws_account_id = await getAWSAccountId();
+
         const params = {
             MessageBody: message,
-            QueueUrl: `https://sqs.${AWS.config.region}.amazonaws.com/${process.env.AWS_DEFAULT_ACCOUNT}/${queue}`
+            QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${aws_account_id}/${queue}`
         };
 
-        return new AWS.SQS({apiVersion: "2012-11-05"}).sendMessage(params).promise();
+        const client = new SQSClient({ apiVersion: "2012-11-05" });
+        const command = new SendMessageCommand(params);
+        return client.send(command);
+
+        // return new AWS.SQS({ apiVersion: "2012-11-05" }).sendMessage(params).promise();
     }
-    
+
 };
 
-const s3 = (): any => (new AWS.S3({ apiVersion: "2006-03-01" }));
+// const s3 = (): any => (new AWS.S3({ apiVersion: "2006-03-01" }));
 
-const ses = (): any => (new AWS.SES({ apiVersion: "2006-03-01" }));
+// const ses = (): any => (new AWS.SES({ apiVersion: "2006-03-01" }));
 
 export default {
-    dynamodb,
     send_ws_message,
-    sns,
     sqs,
-    s3,
-    ses
+    // s3,
+    // ses
 };

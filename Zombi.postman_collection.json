@@ -1,0 +1,626 @@
+{
+	"info": {
+		"_postman_id": "6eb24dde-7564-492b-952d-d239094eb6b4",
+		"name": "Zombi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"token\", jsonData.data.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"mod\": \"system/public\",\r\n    \"fun\": \"login\",\r\n    \"args\": {\r\n        \"username\": \"{{login_username}}\",\r\n        \"password\": \"{{login_password}}\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{service_url}}/server",
+							"host": [
+								"{{service_url}}"
+							],
+							"path": [
+								"server"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"{{token}}\",\r\n    \"mod\": \"system/auth\",\r\n    \"fun\": \"start\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{service_url}}/server",
+							"host": [
+								"{{service_url}}"
+							],
+							"path": [
+								"server"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Users List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"{{token}}\",\r\n    \"mod\": \"system/auth\",\r\n    \"fun\": \"users_list\",\r\n    \"args\": {\r\n        \"search\": \"%\", \"page\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{service_url}}/server",
+							"host": [
+								"{{service_url}}"
+							],
+							"path": [
+								"server"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User By ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"{{token}}\",\r\n    \"mod\": \"system/auth\",\r\n    \"fun\": \"user_by_id\",\r\n    \"args\": \"d784f826-f7f5-466e-a205-948a8ba66cfc\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{service_url}}/server",
+							"host": [
+								"{{service_url}}"
+							],
+							"path": [
+								"server"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"{{token}}\",\r\n    \"mod\": \"system/auth\",\r\n    \"fun\": \"user_create\",\r\n    \"args\": {\r\n        \"username\": \"user124\",\r\n        \"fullname\": \"User One Two Three2\",\r\n        \"email\": \"user2@mail.com\",\r\n        \"language\": \"es\",\r\n        \"country\": \"AR\",\r\n        \"timezone\": \"America/Argentina/Buenos_Aires\",\r\n        \"enabled\": \"Y\",\r\n        \"password\": \"123456\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{service_url}}/server",
+							"host": [
+								"{{service_url}}"
+							],
+							"path": [
+								"server"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Edit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"{{token}}\",\r\n    \"mod\": \"system/auth\",\r\n    \"fun\": \"user_edit\",\r\n    \"args\": {\r\n        \"id\": \"66b73d55-ca8b-40bd-ad0f-c16726142f89\",\r\n        \"username\": \"user124\",\r\n        \"fullname\": \"User One Two Three2\",\r\n        \"email\": \"user2@mail.com\",\r\n        \"language\": \"es\",\r\n        \"country\": \"AR\",\r\n        \"timezone\": \"America/Argentina/Buenos_Aires\",\r\n        \"enabled\": \"Y\",\r\n        \"password\": \"123456\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{service_url}}/server",
+							"host": [
+								"{{service_url}}"
+							],
+							"path": [
+								"server"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"{{token}}\",\r\n    \"mod\": \"system/auth\",\r\n    \"fun\": \"user_delete\",\r\n    \"args\": \"d784f826-f7f5-466e-a205-948a8ba66cfc\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{service_url}}/server",
+							"host": [
+								"{{service_url}}"
+							],
+							"path": [
+								"server"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Toggle",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"{{token}}\",\r\n    \"mod\": \"system/auth\",\r\n    \"fun\": \"user_toggle\",\r\n    \"args\": \"d784f826-f7f5-466e-a205-948a8ba66cfc\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{service_url}}/server",
+							"host": [
+								"{{service_url}}"
+							],
+							"path": [
+								"server"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "i18n",
+			"item": [
+				{
+					"name": "Timezones",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"{{token}}\",\r\n    \"mod\": \"system/i18n\",\r\n    \"fun\": \"timezones\",\r\n    \"args\": {\r\n        \"country\": \"AR\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{service_url}}/server",
+							"host": [
+								"{{service_url}}"
+							],
+							"path": [
+								"server"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Countries",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"{{token}}\",\r\n    \"mod\": \"system/i18n\",\r\n    \"fun\": \"countries\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{service_url}}/server",
+							"host": [
+								"{{service_url}}"
+							],
+							"path": [
+								"server"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Languajes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"{{token}}\",\r\n    \"mod\": \"system/i18n\",\r\n    \"fun\": \"languages\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{service_url}}/server",
+							"host": [
+								"{{service_url}}"
+							],
+							"path": [
+								"server"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Groups",
+			"item": [
+				{
+					"name": "Groups List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"{{token}}\",\r\n    \"mod\": \"system/auth\",\r\n    \"fun\": \"groups_list\",\r\n    \"args\": {\r\n        \"searchx\": \"%\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{service_url}}/server",
+							"host": [
+								"{{service_url}}"
+							],
+							"path": [
+								"server"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Group Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"{{token}}\",\r\n    \"mod\": \"system/auth\",\r\n    \"fun\": \"groups_create_save\",\r\n    \"args\": {\r\n        \"group_name\": \"my group\",\r\n        \"description\": \"this is my group\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{service_url}}/server",
+							"host": [
+								"{{service_url}}"
+							],
+							"path": [
+								"server"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Groups By Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"{{token}}\",\r\n    \"mod\": \"system/auth\",\r\n    \"fun\": \"groups_by_name\",\r\n    \"args\": \"ADMIN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{service_url}}/server",
+							"host": [
+								"{{service_url}}"
+							],
+							"path": [
+								"server"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Groups By ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"{{token}}\",\r\n    \"mod\": \"system/auth\",\r\n    \"fun\": \"groups_by_name\",\r\n    \"args\": \"ADMIN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{service_url}}/server",
+							"host": [
+								"{{service_url}}"
+							],
+							"path": [
+								"server"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ping",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\": \"{{token}}\",\r\n    \"mod\": \"system/tests\",\r\n    \"fun\": \"ping\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{service_url}}/server",
+					"host": [
+						"{{service_url}}"
+					],
+					"path": [
+						"server"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\": \"{{token}}\",\r\n    \"mod\": \"sandbox/bucket\",\r\n    \"fun\": \"ohno\",\r\n    \"args\": \"America/Argentina/Salta\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{service_url}}/server",
+					"host": [
+						"{{service_url}}"
+					],
+					"path": [
+						"server"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

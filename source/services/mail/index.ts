@@ -1,6 +1,6 @@
 import config from "../../platform/config";
 import log from "../../platform/system/log";
-import aws from "../../platform/cloud/aws";
+// import aws from "../../platform/cloud/aws";
 
 import nodemailer from "nodemailer";
 
@@ -50,7 +50,7 @@ export const send = async ({
 
 
 export const send_sns = async (email_params: ZombiMailSendSNS) => {
-    
+
     try {
 
         if (!email_params.Message.Body.Html.Charset) {
@@ -61,7 +61,7 @@ export const send_sns = async (email_params: ZombiMailSendSNS) => {
             email_params.Message.Subject.Charset = "UTF-8";
         }
 
-        await aws.ses().sendEmail(email_params).promise();
+        // await aws.ses().sendEmail(email_params).promise();
 
     } catch (error) {
 

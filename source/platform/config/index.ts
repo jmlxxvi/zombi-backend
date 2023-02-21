@@ -9,15 +9,16 @@ const config: ZombiConfig = {
         databases: {
             default: {
                 uri: process.env.ZOMBI_DB_URL ?? "",
-                pool_size: parseInt(process.env.ZOMBI_DB_POOL_SIZE || "2"),
-                enabled: yes_or_not(process.env.ZOMBI_DB_ENABLED),
+                pool_size: 4,
+                enabled: true,
             },
             secondary: {
                 uri: process.env.ZOMBI_DB_2_URI ?? "",
-                pool_size: parseInt(process.env.ZOMBI_DB_POOL_SIZE_2 || "2"),
-                enabled: yes_or_not(process.env.ZOMBI_DB_ENABLED_2),
+                pool_size: 4,
+                enabled: false,
             }
         },
+        default_db: "default",
         default_schema: process.env.ZOMBI_DB_DEFAULT_SCHEMA || "public"
     },
     cache: {
@@ -80,14 +81,14 @@ const config: ZombiConfig = {
 
     client: {
         endpoint: process.env.ZOMBI_CLIENT_ENDPOINT || "http://localhost:8000/server",
-        queue: process.env.ZOMBI_CLIENT_QUEUE || "lambda-queue-dev"
+        queue: process.env.ZOMBI_LAMBDA_NAME_QUEUE || "lambda-queue-dev"
     },
 
     server: {
         http_port: 8000,
         http_ip: "0.0.0.0",
-        endpoint: process.env.ZOMBI_SERVER_ENDPOINT || "/server",
-        timeout: parseInt(process.env.ZOMBI_SERVER_TIMEOUT || "10000"),
+        endpoint: "/",
+        timeout: parseInt(process.env.ZOMBI_SERVER_TIMEOUT || "20000"),
         send_error_notifications: yes_or_not(process.env.ZOMBI_SERVER_SEND_ERROR_NOTIFICATIONS)
     },
 

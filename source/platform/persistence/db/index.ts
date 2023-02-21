@@ -2,7 +2,7 @@ import { URL } from "node:url";
 
 import config from "../../config";
 import log from "../../system/log";
-import {  uuid } from "../../system/utils";
+import { uuid } from "../../system/utils";
 
 import { normalize_bind } from "./utils";
 
@@ -22,10 +22,6 @@ import type {
 import { ZombiExecuteContextData } from "../../../server/types";
 
 import db_postgresql from "./abstraction/postgresql";
-
-let default_db_name = process.env.ZOMBI_DB_DEFAULT_NAME || "default";
-
-const set_default_db_name = (db_name: string) => default_db_name = db_name;
 
 const get_db_url_parts = (db_name: string) => {
 
@@ -56,7 +52,7 @@ const connect = async (context: ZombiExecuteContextData) => {
     for (const db_name of databases) {
 
         if (config.db.databases[db_name].enabled === true) {
-            
+
             const db_type = get_db_type(db_name);
             const url_parts = get_db_url_parts(db_name);
 
@@ -157,7 +153,7 @@ const row = <T>(data: T[]) => data.length > 0 ? data[0] : null;
  * @param db_name - The database configured on core/config
  * @return The sequence value
  */
-const sequence = async (db_name = default_db_name): Promise<number> => {
+const sequence = async (db_name = config.db.default_db): Promise<number> => {
 
     const res = await _sql<{ seq: number }>(`select (nextval('${config.db.default_schema}.zombi_seq')::integer) as "seq"`, [], db_name);
 
@@ -176,7 +172,7 @@ const sequence = async (db_name = default_db_name): Promise<number> => {
  * @param params.order_by - The order of the results. See _order_by()
  * @return An array with the rows returned from the query or an empty array if no rows were found
  */
-const select = async <T>({ table, where = null, columns = null, db_name = default_db_name, order_by = null }: ZombiDBSQLSelectInput): Promise<T[]> => {
+const select = async <T>({ table, where = null, columns = null, db_name = config.db.default_db, order_by = null }: ZombiDBSQLSelectInput): Promise<T[]> => {
 
     const { sql_where, bind } = _filter(where);
 
@@ -274,7 +270,7 @@ const _order_by = (order_by: ZombiDBSQLOrderByInput): string => {
  * @param params.db_name - The database configured on core/config
  * @return The affected rows on the insert operation
  */
-const update = async ({ table, where = null, values = {}, db_name = default_db_name }: ZombiDBSQLUpdateInput) => {
+const update = async ({ table, where = null, values = {}, db_name = config.db.default_db }: ZombiDBSQLUpdateInput) => {
 
     const { sql_where, bind } = _filter(where);
 
@@ -301,7 +297,7 @@ const update = async ({ table, where = null, values = {}, db_name = default_db_n
  * @param params.db_name - The database configured on core/config
  * @return The affected rows on the insert operation
  */
-const insert = async ({ table, values = {}, db_name = default_db_name }: ZombiDBSQLInsertInput) => {
+const insert = async ({ table, values = {}, db_name = config.db.default_db }: ZombiDBSQLInsertInput) => {
 
     const sql_columns = Object.keys(values).join(", ");
     const sql_values = Object.keys(values).join(", :");
@@ -325,7 +321,7 @@ const insert = async ({ table, values = {}, db_name = default_db_name }: ZombiDB
  * @param params.db_name - The database configured on core/config
  * @return The affected rows on the delete operation
  */
-const _delete = async ({ table, where = null, db_name = default_db_name }: ZombiDBSQLDeleteInput) => {
+const _delete = async ({ table, where = null, db_name = config.db.default_db }: ZombiDBSQLDeleteInput) => {
 
     const { sql_where, bind } = _filter(where);
 
@@ -436,7 +432,6 @@ const _columns = (columns: null | string | string[]): string => {
 const _uuid = (): string => uuid();
 
 export default {
-    set_default_db_name,
     sql,
     value,
     row,

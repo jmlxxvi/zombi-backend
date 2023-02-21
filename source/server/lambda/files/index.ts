@@ -6,7 +6,7 @@ import cache from "../../../platform/persistence/cache";
 import db from "../../../platform/persistence/db";
 import security from "../../../platform/system/security";
 import { timestamp, uuid } from "../../../platform/system/utils";
-import aws from "../../../platform/cloud/aws";
+// import aws from "../../../platform/cloud/aws";
 import codes from "../../../platform/codes";
 import { notify_errors } from "../../../platform/system/errors/notify";
 
@@ -123,34 +123,36 @@ export const handler = async (event: S3Event): Promise<void> => {
 
                         log.debug(`Processing file ${file_key}`, "lambda/handler:files", context);
 
-                        const file_contents = (await aws.s3().getObject({
-                            Bucket: bucket_name,
-                            Key: file_key,
-                        }).promise()).Body;
+                        // const file_contents = (await aws.s3().getObject({
+                        //     Bucket: bucket_name,
+                        //     Key: file_key,
+                        // }).promise()).Body;
+
+                        const file_contents = "";
 
                         log.debug(`File size ${file_contents.length}`, "files/run", context);
 
                         if (bucket_name === process.env.VMD_EDF_UPLOAD_BUCKET) {
 
                             try {
-                    
+
                                 if (path.extname(file_key) === ".zip") {
-                    
+
                                     log.debug(`File ${file_key} is a zip file`, "files/run", context);
-                                    
+
                                 } else {
                                     log.debug(`File ${file_key} is not a zip file`, "files/run", context);
                                 }
-                    
+
                             } catch (error) {
-                                
-                    
+
+
                                 log.error(error, "files/run", context);
                             }
-                    
-                    
-                    
-                    
+
+
+
+
                         } else {
                             console.error("WRONG BUCKET NAME");
                         }
@@ -258,7 +260,7 @@ export const handler = async (event: S3Event): Promise<void> => {
 //     });
 // }
 
-/* 
+/*
 
 const run2 = async (bucket_name: string, file_key: string, file_contents: Buffer, request_id: string): Promise<void> => {
 
@@ -302,32 +304,32 @@ const run2 = async (bucket_name: string, file_key: string, file_contents: Buffer
                     const fid = "z01";
 
                     const out_dir = `/tmp/${fid}/`;
-                
+
                     // const file_contents = fs.readFileSync("files/luisa/1657817272543_JGyvsr3hv7svQdycgdHRed.zip");
                     // const file_contents = fs.readFileSync("files/luisa/1650567138324_Gp5Q9pDEYGNCoFMqf2moDt.zip");
-                
+
                     const zip_data = await zip.loadAsync(file_contents);
-                
+
                     const keys = Object.keys(zip_data.files);
-                
+
                     fs.mkdirSync(out_dir, { recursive: true });
-                    
+
                     for (const key of keys) {
-                    
+
                         const file = zip_data.files[key];
-                    
+
                         if (file.dir) {
                             fs.mkdirSync(file.name);
                         } else {
                             console.log(file.name);
-                
+
                             if (path.extname(file.name) === ".edf" && file.name.substring(0, 3) !== "WD_") { // Trilogy WD_ files are not loaded
-                
+
                                 const buffer = Buffer.from(await file.async("arraybuffer"));
                                 fs.writeFileSync(`${out_dir}/${file.name}`, buffer);
                                 // const edfdata = edf.parser(buffer, { data_as_objects: true });
                                 // console.log(edfdata.header);
-                
+
                             } else {
                                 console.log("Skipping " + file.name);
                             }
@@ -350,7 +352,7 @@ const run2 = async (bucket_name: string, file_key: string, file_contents: Buffer
                         console.log(file);
                     });
 
-                    
+
 
                 } else {
                     log.error(`Device not found for patient ${patient_id}`, "files/run", context);

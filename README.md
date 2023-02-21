@@ -1,4 +1,3 @@
-
 <h1 align="center">
   <a href="https://github.com/jmlxxvi">
     <img src="https://jmlxxvi.github.io/images/icons/geek_zombie256.png">
@@ -8,18 +7,20 @@
 # Zombi JSON-RPC Server: Simplicity is the ultimate sophistication.
 
 ## Table of Contents
+
 - [Intro](#Intro)
 - [Concepts](#Concepts)
 - [Installation](#Installation)
 
 ## Intro
-Zombi is an RPC application server and framework with expressive, elegant syntax and tools. 
+
+Zombi is an RPC application server and framework with expressive, elegant syntax and tools.
 
 We believe development must be an enjoyable, creative experience to be truly fulfilling. Zombi attempts to take the pain out of development by easing common tasks used in the majority of application projects, such as authentication, sessions, database access and caching.
 
 It aims to make the development process a pleasing one for the developer without sacrificing application functionality. Happy developers make the best code. To this end, we've attempted to combine the very best of what we have seen in other web frameworks, including frameworks implemented in other languages, such as Java or PHP.
 
-Zombi is accessible, yet powerful, providing powerful tools needed for large, robust applications. 
+Zombi is accessible, yet powerful, providing powerful tools needed for large, robust applications.
 
 A superb technology stack, expressive APIs, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
 
@@ -31,7 +32,7 @@ Zombi is an RPC server. More precisely a JSON-RPC server.
 
 That means you send an JSON string (via HTTPs) and the server responds kindly with another JSON string document.
 
-Being an RPC server also means that the abstraction created to communicate with the server is a *function*. In other words the programmer thinks the communication with the backend in terms of what functions he needs to execute instead of which route, verb or parameters is needed, like in REST. In fact the programmer is being abstracted from the fact that there is a server at all and just execute functions as if they were local to the frontend application.
+Being an RPC server also means that the abstraction created to communicate with the server is a _function_. In other words the programmer thinks the communication with the backend in terms of what functions he needs to execute instead of which route, verb or parameters is needed, like in REST. In fact the programmer is being abstracted from the fact that there is a server at all and just execute functions as if they were local to the frontend application.
 
 ### How does it work?
 
@@ -39,14 +40,15 @@ Let's see what would be executed in a web frontend application using Zombi:
 
 ```javascript
 const response = await ZOMBI.server([
-  "system/public", 
-  "login", 
-  { 
-    username, 
-    password
-  }
+  "system/public",
+  "login",
+  {
+    username,
+    password,
+  },
 ]);
 ```
+
 Here the function `ZOMBI.server()` is receiving 3 parameters (yes, is just one parameter, an array, I know, just follow me).
 These three parts are:
 
@@ -58,19 +60,21 @@ The resulting JSON that the function `ZOMBI.server()` uses to send to the server
 
 ```json
 {
-	"mod": "system/public",
-	"fun": "login",
-	"args": { "username": "johnny", "password": "Br@v0" }
+  "mod": "system/public",
+  "fun": "login",
+  "args": { "username": "johnny", "password": "Br@v0" }
 }
 ```
 
 In pseudo code the function executed on the backend could be represented as:
+
 ```javascript
 system/public:login({username, password})
 ```
 
 We are using this nomenclature again.
 The general form to represent an RPC function is:
+
 ```javascript
 <module_path>:<function_name>(<function_arguments>)
 ```
@@ -93,7 +97,7 @@ An example of such a function would be:
 
 ```javascript
 const login = async (
-  args: ZombiAPILoginArguments, 
+  args: ZombiAPILoginArguments,
   context: ZombiExecuteContextData
 ): Promise<ZombiExecuteReturnData<any>> => {
 
@@ -111,6 +115,7 @@ const login = async (
 ```
 
 The 3 most important parts of the above function are:
+
 - The function name, `login` in this case.
 - The parameter `args` received by the function
 - The object literal returned from the function.
@@ -119,11 +124,12 @@ If we remember what was sent by the client:
 
 ```json
 {
-	"mod": "system/public",
-	"fun": "login",
-	"args": { "username": "johnny", "password": "Br@v0" }
+  "mod": "system/public",
+  "fun": "login",
+  "args": { "username": "johnny", "password": "Br@v0" }
 }
 ```
+
 We can see that there is a relation on what is sent with the function executed on the server.
 
 The name of the function executed on the server is the same sent as the key `fun` from the JSON sent by the client.
@@ -137,6 +143,7 @@ All the above makes this framerok on an RCP server.
 ## Installation
 
 ### Requirements
+
 - [Node v14+](https://nodejs.org/en/)
 - [Docker](https://www.docker.com/)
 
@@ -153,7 +160,8 @@ sudo apt install nodejs
 node -v
 ```
 
-You should see something like: 
+You should see something like:
+
 ```bash
 v14.2.0
 ```
@@ -161,29 +169,34 @@ v14.2.0
 Your minor number may be different.
 
 ### Code
+
 Clone the repository:
- ```bash
+
+```bash
 git clone https://gitlab.com/telecom-argentina/coo/fintech/api-lambda/la-monolambda.git
 ```
 
 Install dependencies:
- ```bash
+
+```bash
 npm run inst
 ```
- 
+
 ### Environment
- Important: you must create a directory **.env** and add a file name **local** to it and set proper environment variables.
-  ```bash
+
+Important: you must create a directory **.env** and add a file name **local** to it and set proper environment variables.
+
+```bash
 mkdir .env
 touch .env/local
- ```
+```
 
-> Despite the fact that any file would work as a source for environment variables the directory and file name needs to be exactly `.env/local` because some NPM scripts assume the enviroment variables are defined  there.
+> Despite the fact that any file would work as a source for environment variables the directory and file name needs to be exactly `.env/local` because some NPM scripts assume the enviroment variables are defined there.
 
- Then edit the file `.env/local` adding the following variables:
+Then edit the file `.env/local` adding the following variables:
 
- ```bash
- # Database
+```bash
+# Database
 export ZOMBI_DB_USER=my_db_user
 export ZOMBI_DB_HOST=my_db_host
 export ZOMBI_DB_PORT=my_db_port
@@ -203,7 +216,6 @@ export ZOMBI_CACHE_TLS=false
 export NODE_ENV=local
 export ZOMBI_SERVER_TIMEOUT=300000
 export ZOMBI_LAMBDA_NAME=my_lambda_name
-export ZOMBI_SERVER_ENDPOINT='/server'
 
 # Client
 export ZOMBI_CLIENT_ENDPOINT='http://localhost:8000/server'
@@ -234,6 +246,7 @@ cp infra/localcontainer/env.example .env/local
 ```
 
 Once the file is edited with the appropiate variables or copied from the example file, set the environment:
+
 ```bash
 . .env/local
 ```
@@ -265,16 +278,16 @@ curl --location --request POST 'http://localhost:8000/server' \
 }'
 ```
 
-And you would receive something like: 
+And you would receive something like:
 
 ```json
 {
-    "error": false,
-    "code": 200,
-    "message": "ok",
-    "data": "2021-03-16 13:13:42",
-    "elapsed": 278,
-    "request_id": "c9bb518a-1848-49ac-b7ae-1b025be213e6"
+  "error": false,
+  "code": 200,
+  "message": "ok",
+  "data": "2021-03-16 13:13:42",
+  "elapsed": 278,
+  "request_id": "c9bb518a-1848-49ac-b7ae-1b025be213e6"
 }
 ```
 
@@ -295,13 +308,11 @@ DD_SERVICE zombi
 DD_VERSION 12
 DD_TAGS type:api,team:platform
 
-
-
 FROM node:14 as base
 
 WORKDIR /home/node/app
 
-COPY package*.json ./
+COPY package\*.json ./
 
 RUN npm i
 
@@ -312,4 +323,3 @@ FROM base as production
 ENV NODE_PATH=./build
 
 RUN npm run build
-

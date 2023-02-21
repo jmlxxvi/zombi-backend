@@ -5,8 +5,8 @@ import config from "../../../platform/config";
 import log from "../../../platform/system/log";
 import cache from "../../../platform/persistence/cache";
 import db from "../../../platform/persistence/db";
-import security from "../../../platform/system/security";
-import session from "../../../platform/system/session";
+// import security from "../../../platform/system/security";
+// import session from "../../../platform/system/session";
 import { timestamp, uuid } from "../../../platform/system/utils";
 import codes from "../../../platform/codes";
 import { notify_errors } from "../../../platform/system/errors/notify";
@@ -30,33 +30,33 @@ export const run = async (context: ZombiExecuteContextData, type: string): Promi
     /* IMPORTANT NOTE: Anything running below should NOT bubble up exceptions. Please catch ALL exceptions inside the called module. */
     switch (type) {
 
-    case "every_10minutes":
+        case "every10minutes":
 
-        await Promise.all([
-            session.expire({ context })
-        ]);
-                
-        break;
+            await Promise.all([
+                // session.expire({ context })
+            ]);
 
-    case "every_hour":
-        await Promise.all([
-        ]);
-        break;
+            break;
 
-    case "every_6hours":
-        
-        break;
+        case "everyHour":
+            await Promise.all([
+            ]);
+            break;
 
-    case "every_12hours":
+        case "every6hours":
 
-        break;
+            break;
 
-    case "every_day":
-        await Promise.all([
-        ]);
-        break;
-            
-    default: log.error(`Invalid Reactor type specified: ${type}`, "reactor/run", context); break;
+        case "every12hours":
+
+            break;
+
+        case "everyDay":
+            await Promise.all([
+            ]);
+            break;
+
+        default: log.error(`Invalid Reactor type specified: ${type}`, "reactor/run", context); break;
 
     }
 
@@ -84,21 +84,19 @@ export const handler = async (event: LambdaIncomingFromEventBridge): Promise<voi
         if (!bootstrap_done) {
 
             bootstrap_done = true;
-    
+
             log.info("Starting handler", "lambda/handler", context);
-    
+
             codes.load(context);
-    
+
             await cache.connect({ request_id });
-    
+
             await db.connect({ request_id });
-    
-            await security.start({ request_id }, true);
-    
+
             log.debug(`Lambda bootstrap run time: ${bootstrap_end_time - bootstrap_start_time}ms`, "lambda/handler", context);
-    
+
             log.debug(`Lambda start time: ${Date.now() - start_time}ms`, "lambda/handler", context);
-    
+
         }
 
         try {

@@ -1,0 +1,115 @@
+###################
+## CORE settings ##
+###################
+
+# Context
+export NODE_ENV=local
+export ZOMBI_CONTEXT=local
+
+# Databases
+# postgresql://[user[:password]@][netloc][:port][/dbname][?param1=value1&...]
+export ZOMBI_DB_URL=postgresql://postgres:postgres@localhost:15432/postgres
+export ZOMBI_DB_POOL_SIZE=4
+export ZOMBI_DB_ENABLED=yes
+export ZOMBI_DB_DEFAULT_NAME="default"
+export ZOMBI_DB_DEFAULT_SCHEMA="app_sys"
+
+# Cache
+export ZOMBI_CACHE_URL=redis://:redispass@localhost:16379
+
+# Miscellaneous
+export ZOMBI_SERVER_TIMEOUT=30000
+export ZOMBI_SERVER_SEND_ERROR_NOTIFICATIONS=no
+export ZOMBI_SERVER_MAX_MEMORY_ALARM=80
+
+export ZOMBI_SERVER_ENDPOINT="/server"
+export ZOMBI_STORAGE_PATH="/tmp"
+
+# Client
+export ZOMBI_CLIENT_ENDPOINT="http://localhost:8000/server"
+
+# Stats
+export ZOMBI_STATS_ENABLED=true
+export ZOMBI_STATS_MEMORY_CHECK_INTERVAL=300
+
+
+# Logging
+export ZOMBI_LOG_LEVEL=TRACE
+export ZOMBI_LOG_SHOW_TIMESTAMP=yes
+export ZOMBI_LOG_SHOW_ICONS=yes
+
+# Security
+export ZOMBI_AUTH_MODULE_ACCESS=yes
+export ZOMBI_HIDE_SERVER_ERRORS=no
+export ZOMBI_SYSTEM_USER_ID="3f0a91b2-7d9d-4ced-bac7-608d278620cd"
+export ZOMBI_ADMIN_GROUP_ID="5a228dec-7689-47c8-bfb7-cab1400cad7b"
+export ZOMBI_LOG_ARGUMENTS=yes
+export ZOMBI_TEST_USER_NAME=system
+export ZOMBI_TEST_USER_PASSWORD=manager
+
+# Reactor
+export ZOMBI_AUTH_REACTOR_TOKEN=azHIA1LEmYlGg7o3g5j3ca78dfdcx7m8ylbuuvf
+export ZOMBI_AUTH_REACTOR_ENABLED=no
+
+# Notifications
+export ZOMBI_NOTIFICATIONS_EMAIL_USER=zombidevelopment@gmail.com
+export ZOMBI_NOTIFICATIONS_EMAIL_PASS=youdontknow
+export ZOMBI_NOTIFICATIONS_EMAIL_URL="http://localhost:8080/login.html"
+
+# Slack
+export ZOMBI_SLACK_WEBHOOK_URL="https://hooks.slack.com/services/abc/xyz"
+
+# Google
+export ZOMBI_FIREBASE_MESSAGING_URL="https://fcm.googleapis.com/fcm/send"
+#export ZOMBI_FIREBASE_MESSAGING_KEY="AAAAfPFgBHI:APA91bF1XcQwbMcHqtDVVjPVufMSqkpZZSYVysifpSdKKp0utKO-rwlazHIA1LEmYlGg7o3g5jVva-MxpOXH_CP224bthZ_82xR-AFqWbFlC3ZotuVzTZfqkaPllAGhJoLbtJtAkIlMC"
+# export ZOMBI_FIREBASE_MESSAGING_KEY="AAAAL5kRh0o:APA91bGSD9jpQtT4SPPM_eR76cbCDk7pdBpIgnFRyotTNCcChWJHBmJiZWgzOubVi3eFPK8c0fXd_CvV-PD57vrc7rDSG16gNzDPyMykiFKYJdgvlPevVuYUKCsuo4whCFhs9PMhTAwv"
+export ZOMBI_FIREBASE_MESSAGING_KEY="AAAAyAtPfEk:APA91bFbblSaxUTPd2fAlv2zb9yZiOSBZZHueavTqu9RkXmqZPqdbg_-KtT2CcICKDIBnCexThnXGEUIGBWA-epKg5uCEu1aq7aSnYIXJ67sb7O0Znr2mHQcUW8UgBupLd-Gh0DMF6LS"
+export ZOMBI_FIREBASE_AUTH_CLIENT_ID="859183217737-a4vvo0ne9633lqd0emol5arua0r52ttd.apps.googleusercontent.com"
+#
+
+# Lambda
+export ZOMBI_CODE_BUCKET=lambda-code-bucket-z7m9yv-dev
+export ZOMBI_LAMBDA_NAME_MICROSERVER=lambda-server-dev
+export ZOMBI_LAMBDA_NAME_QUEUE=lambda-queue-dev
+export ZOMBI_LAMBDA_NAME_REACTOR=lambda-reactor-dev
+export ZOMBI_LAMBDA_NAME_WEBSOCKETS=lambda-queue-dev
+export ZOMBI_LAMBDA_NAME_FILES=lambda-files-dev
+
+
+
+##################
+## APP settings ##
+##################
+
+export APP_FRAUD_REPORTS_ENABLED=true
+export APP_FRAUD_BUCKET_NAME="jmg-lambda-test"
+export APP_FRAUD_LINK_TIMEOUT=172800
+export APP_FRAUD_SLACK_TOKEN="TC3EB5KC7/B01G99M4K6Y/VoMv2hQ7yKPxFK6rw3uBCVB5"
+
+export APP_EVENTS_KAFKA_BROKERS="172.17.0.1:9092,172.17.0.1:9092"
+export APP_EVENTS_KAFKA_PASSPHRASE=tecodev2021
+
+export APP_IDP_JWK_URI="https://idpsesiont.telecom.com.ar/openam/oauth2/fintechdev-app/connect/jwk_uri"
+export APP_IDP_JWK_ISSUER="https://idpsesiont.telecom.com.ar:443/openam/oauth2/fintechdev-app"
+export APP_IDP_JWK_AUDIENCE="oidc-fintechapk-dev"
+
+export APP_BA_GOOGLE_CLIENT_ID=767511689509-m827p1ujug7gjpi59bj4fkn93tpjt2pe.apps.googleusercontent.com
+
+####################
+## Health Gorilla ##
+####################
+export HEALTH_GORILLA_DOMAIN=https://sandbox.healthgorilla.com
+export HEALTH_GORILLA_CLIENT_ID=AbJ59n5hKa5XEBA9eG4kjnqqbaxwcSXHvZZQ3WVG
+export HEALTH_GORILLA_CLIENT_SECRET=yb2/F0Vay2z9E/sf9hUQEUExXCYJLc8m+jDtk1s9iv0=
+# export HEALTH_GORILLA_SUB=fabricio.pautasso1
+export HEALTH_GORILLA_SUB=jmquillens
+
+#########
+## AWS ##
+#########
+export AWS_DEFAULT_REGION=us-east-1
+export AWS_DEFAULT_ACCOUNT=703408314536
+export AWS_DEFAULT_OUTPUT=json
+export AWS_PAGER=""
+export AWS_ACCESS_KEY_ID=AKIA3CF4FD2ITOXBGSMZ
+export AWS_SECRET_ACCESS_KEY=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

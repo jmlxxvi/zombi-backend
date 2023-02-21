@@ -202,22 +202,6 @@ export const fibonacci = async (args: number, _context: ZombiExecuteContextData)
 };
 
 
-export const sendsns = async (_args: never, _context: ZombiExecuteContextData): Promise<ZombiAPIReturnData<any>> => {
-
-    // aws sns subscribe --topic-arn arn:aws:sns:us-east-1:382257471380:JMG-TEST-SNS-1 --protocol email --notification-endpoint jmguillen@teco.com.ar
-
-    const { topic, message } = args;
-
-    await aws.sns.publish(topic, message);
-
-    return {
-        error: false,
-        code: 1000,
-        data: null
-    };
-
-};
-
 export const kafkapublish = async (args: any, context: ZombiExecuteContextData): Promise<ZombiAPIReturnData<any>> => {
 
     const topic = args.topic ? args.topic : "jmgtopic";
@@ -295,7 +279,7 @@ export const memory_leak_gc = async (args: number, _context: ZombiExecuteContext
 
     let message = 'GC not enabled'; // node --expose_gc -r ts-node/register source/server
 
-    if(global.gc) {
+    if (global.gc) {
         global.gc();
         message = 'GC is enabled';
     }
@@ -356,7 +340,7 @@ export const transaction_pool_client = async (args: number, _context: ZombiExecu
             query: "update users set country = :country where username = 'test'",
             bind: ['XZ']
         });
-    
+
         await db_client.sql({ query: "COMMIT" });
 
         return {
@@ -364,7 +348,7 @@ export const transaction_pool_client = async (args: number, _context: ZombiExecu
             code: 1000,
             data: null
         };
-        
+
     } catch (error) {
 
         await db_client.sql({ query: "ROLLBACK" });
@@ -376,7 +360,7 @@ export const transaction_pool_client = async (args: number, _context: ZombiExecu
             code: 1100,
             data: error.message + " / " + error.code,
         };
-        
+
     } finally {
 
         await db_client.release_pool_client();
@@ -403,7 +387,7 @@ export const transaction_pool_client_serialized = async (args: number, _context:
             query: "update users set country = :country where username = 'test'",
             bind: ['XZ']
         });
-    
+
         await db_client.sql({ query: "COMMIT" }); // could not serialize access due to concurrent update: 40001"
 
         return {
@@ -411,7 +395,7 @@ export const transaction_pool_client_serialized = async (args: number, _context:
             code: 1000,
             data: null
         };
-        
+
     } catch (error) {
 
         await db_client.sql({ query: "ROLLBACK" });
@@ -423,7 +407,7 @@ export const transaction_pool_client_serialized = async (args: number, _context:
             code: 1100,
             data: error.message + " / " + error.code,
         };
-        
+
     } finally {
 
         await db_client.release_pool_client();
@@ -448,7 +432,7 @@ export const websockets_send_to_token = async (args: any, _context: ZombiExecute
 
 export const send_push_notification_to_token = async (args: string, context: ZombiExecuteContextData): Promise<ZombiAPIReturnData<any>> => {
 
-    const {token, payload} = args;
+    const { token, payload } = args;
 
     const data = await send_firebase_message_to_session_token({
         token,

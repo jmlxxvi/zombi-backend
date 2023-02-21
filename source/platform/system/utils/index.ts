@@ -19,13 +19,13 @@ export const date_format = (date: any, format: string, use_utc = false): string 
     const f = use_utc ? "getUTC" : "get";
     return format.replace(/%[YmdHMSx]/g, (m: string) => {
         switch (m) {
-        case "%Y": return date[f + "FullYear"](); // no leading zeros required
-        case "%m": m = 1 + date[f + "Month"](); break;
-        case "%d": m = date[f + "Date"](); break;
-        case "%H": m = date[f + "Hours"](); break;
-        case "%M": m = date[f + "Minutes"](); break;
-        case "%S": m = date[f + "Seconds"](); break;
-        case "%x": return ("00" + date[f + "Milliseconds"]()).slice(-3);
+            case "%Y": return date[f + "FullYear"](); // no leading zeros required
+            case "%m": m = 1 + date[f + "Month"](); break;
+            case "%d": m = date[f + "Date"](); break;
+            case "%H": m = date[f + "Hours"](); break;
+            case "%M": m = date[f + "Minutes"](); break;
+            case "%S": m = date[f + "Seconds"](); break;
+            case "%x": return ("00" + date[f + "Milliseconds"]()).slice(-3);
         }
         return ("0" + m).slice(-2);
     });

@@ -9,7 +9,8 @@ export type ZombiConfig = {
                 enabled: boolean,
             }
         },
-        default_schema: string
+        default_db: string,
+        default_schema: string,
     },
     cache: {
         uri: string,
@@ -76,7 +77,7 @@ export type ZombiConfig = {
     firebase: {
         messaging: {
             url: string,
-            server_key: string 
+            server_key: string
         }
 
     },

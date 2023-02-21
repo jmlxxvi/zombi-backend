@@ -34,31 +34,31 @@ const set_session_data = async (data: WSSessionData, token: string, connection_i
 
 const _connect = async (
     { token, connection_id, domain_name, stage, context }:
-    { token: string, connection_id: string, domain_name: string, stage: string, context: ZombiExecuteContextData }
+        { token: string, connection_id: string, domain_name: string, stage: string, context: ZombiExecuteContextData }
 ) => {
 
     if (token) {
 
         log.debug(`Connecting from token: ${string_end(token)}, connection ID: ${connection_id}`, "websockets/_connect", context);
-    
+
         const session_data = await session.get_all(token);
-    
+
         if (session_data === null) {
-            
+
             throw new Error(`Session not found for token: ${string_end(token)}, connection ID: ${connection_id} not created`);
-    
+
         } else {
-    
+
             const cache_data = { token, domain_name, stage };
-        
+
             await set_session_data(cache_data, token, connection_id, cache_prefix());
-    
+
         }
 
     } else {
 
         throw new Error("Invalid token sent to connect");
-        
+
     }
 
 };
@@ -86,7 +86,7 @@ const _disconnect = async ({ connection_id, context }: { connection_id: string, 
 
 const _default = async (
     { connection_id, domain_name, stage, context, body }:
-    { connection_id: string, domain_name: string, stage: string, context: ZombiExecuteContextData, body: string }
+        { connection_id: string, domain_name: string, stage: string, context: ZombiExecuteContextData, body: string }
 ) => {
 
     log.debug(`Default action contains [${JSON.stringify(body)}], connection ID: ${connection_id}`, "websockets/_default", context);
@@ -94,29 +94,29 @@ const _default = async (
     try {
 
         if (body.substring(0, 4) === "ping") {
-            
+
             try {
 
                 await aws.send_ws_message({ domain_name, stage, connection_id, message: "pong" });
-                
+
             } catch (error) {
-    
+
                 log.error(error, "sockets/send_message_to_session", context);
-                
+
             }
 
         }
-        
+
     } catch (error) {
 
         try {
 
             await aws.send_ws_message({ domain_name, stage, connection_id, message: error.message });
-            
+
         } catch (error) {
 
             log.error(error, "sockets/send_message_to_session", context);
-            
+
         }
 
     }
@@ -124,8 +124,8 @@ const _default = async (
 };
 
 const run = async (
-    { token, connection_id, route_key, body, domain_name, stage, context }: 
-    { token: string, connection_id: string, route_key: string, body: string, domain_name: string, stage: string, context: ZombiExecuteContextData }
+    { token, connection_id, route_key, body, domain_name, stage, context }:
+        { token: string, connection_id: string, route_key: string, body: string, domain_name: string, stage: string, context: ZombiExecuteContextData }
 ): Promise<void> => {
 
     if (route_key === "$connect") {

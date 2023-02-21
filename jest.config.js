@@ -1,7 +1,7 @@
 module.exports = {
     preset: "ts-jest",
     testEnvironment: "node",
-    testPathIgnorePatterns: ["node_modules", ".d.ts", ".js"],
+    testPathIgnorePatterns: ["node_modules/", "infra/", ".d.ts", ".js"],
     verbose: true,
     testTimeout: 20000,
     // TODO we are experimenting with @swc/jest to make the tests compile faster.

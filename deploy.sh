@@ -1,53 +1,56 @@
-
-[ -z "${AWS_ACCESS_KEY_ID}" ] && echo "AWS credentials not set!" && exit 1
-
 [ -z "${ZOMBI_LAMBDA_NAME_MICROSERVER}" ] && echo "Zombi environment not set!" && exit 2
 
-# cd "${BASH_SOURCE%/*}/" || exit 
-
-# pwd
+export AWS_PAGER=""
 
 DATETIME=$(date +"%Y_%m_%d.%H_%M_%S")
 
-if [ -n "$1" ] 
-then 
-    LAMBDA_SHORT_NAME="microserver"
+if [ -z "$1" ]; then
+    LAMBDA_TO_UPLOAD="all"
 else 
-    LAMBDA_SHORT_NAME=$1
+    LAMBDA_TO_UPLOAD=$1
 fi
 
-case LAMBDA_SHORT_NAME in
-"microserver")
-    LAMBDA_NAME=${ZOMBI_LAMBDA_NAME_MICROSERVER}
-    ;;
-"queue")
-    LAMBDA_NAME=${ZOMBI_LAMBDA_NAME_QUEUE}
-    ;;
-"reactor")
-    LAMBDA_NAME=${ZOMBI_LAMBDA_NAME_REACTOR}
-    ;;
-"websockets")
-    LAMBDA_NAME=${ZOMBI_LAMBDA_NAME_WEBSOCKETS}
-    ;;
-"files")
-    LAMBDA_NAME=${ZOMBI_LAMBDA_NAME_FILES}
-    ;;
-esac
-
-# TODO check if LAMBDA_NAME is not empty
-
-CODE_FILE=${DATETIME}_${LAMBDA_NAME}.zip
+# CODE_FILE=${DATETIME}_${LAMBDA_NAME}.zip
+CODE_FILE=${DATETIME}_ZOMBI_LAMBDA_CODE.zip
 
 echo "Code file is ${CODE_FILE}"
 
-echo "Uploading code for ${LAMBDA_NAME}..."
+echo "Building code..."
 npm run build && \
 cd build && \
 zip -q -r ${CODE_FILE} . && \
-aws s3 cp ./${CODE_FILE} s3://${AWS_CONFIG_CODE_BUCKET_NAME}/ --exclude "*" --include "*.zip" && \
+aws s3 cp ./${CODE_FILE} s3://${ZOMBI_CODE_BUCKET}/ --exclude "*" --include "*.zip" && \
 rm -f ${CODE_FILE} && \
 cd ..
 
-echo "Updating function ${LAMBDA_NAME}..."
-aws lambda update-function-code --function-name ${LAMBDA_NAME} --region ${AWS_DEFAULT_REGION} --s3-bucket ${AWS_CONFIG_CODE_BUCKET_NAME} --s3-key ${CODE_FILE}
+echo "Updating lambdas..."
+
+for LAMBDA_SHORT_NAME in microserver queue reactor websockets files; do
+    case ${LAMBDA_SHORT_NAME} in
+    "microserver")
+        LAMBDA_NAME=${ZOMBI_LAMBDA_NAME_MICROSERVER}
+        ;;
+    "queue")
+        LAMBDA_NAME=${ZOMBI_LAMBDA_NAME_QUEUE}
+        ;;
+    "reactor")
+        LAMBDA_NAME=${ZOMBI_LAMBDA_NAME_REACTOR}
+        ;;
+    "websockets")
+        LAMBDA_NAME=${ZOMBI_LAMBDA_NAME_WEBSOCKETS}
+        ;;
+    "files")
+        LAMBDA_NAME=${ZOMBI_LAMBDA_NAME_FILES}
+        ;;
+    esac
+
+    if [ "${LAMBDA_SHORT_NAME}" = "${LAMBDA_TO_UPLOAD}" ] || [ "${LAMBDA_TO_UPLOAD}" = "all" ]; then
+        echo "Updating function ${LAMBDA_NAME} from bucket ${ZOMBI_CODE_BUCKET}"
+        aws lambda update-function-code --function-name ${LAMBDA_NAME} --s3-bucket ${ZOMBI_CODE_BUCKET} --s3-key ${CODE_FILE}
+    else
+        echo "Skipping configuration of (${LAMBDA_SHORT_NAME}) ${LAMBDA_NAME}"
+    fi
+done 
+
+
 

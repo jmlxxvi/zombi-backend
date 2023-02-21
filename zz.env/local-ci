@@ -1,0 +1,88 @@
+###################
+## CORE settings ##
+###################
+
+# Context
+export ZOMBI_CONTEXT=development
+
+# Databases
+export ZOMBI_DB_USER=postgres
+export ZOMBI_DB_HOST=localhost
+export ZOMBI_DB_PORT=5432
+export ZOMBI_DB_PASS=postgres
+export ZOMBI_DB_NAME=postgres
+export ZOMBI_DB_TYPE=postgresql
+export ZOMBI_DB_ENABLED=yes
+
+#export ZOMBI_DB_USER=root
+#export ZOMBI_DB_HOST=localhost
+#export ZOMBI_DB_PORT=3306
+#export ZOMBI_DB_PASS=root
+#export ZOMBI_DB_NAME=mysql
+#export ZOMBI_DB_TYPE=mysql
+#export ZOMBI_DB_ENABLED=yes
+
+#export ZOMBI_DB_USER_2=root
+#export ZOMBI_DB_HOST_2=localhost
+#export ZOMBI_DB_PORT_2=3306
+#export ZOMBI_DB_PASS_2=root
+#export ZOMBI_DB_NAME_2=coral
+#export ZOMBI_DB_TYPE_2=mysql
+#export ZOMBI_DB_ENABLED_2=yes
+
+export ZOMBI_DB_SCHEMA_LOCKED=false
+export ZOMBI_DB_DEFAULT_NAME="default"
+
+export ZOMBI_DB_MIGRATION_USER=postgres
+export ZOMBI_DB_MIGRATION_HOST=localhost
+export ZOMBI_DB_MIGRATION_PORT=5432
+export ZOMBI_DB_MIGRATION_PASS=postgres
+export ZOMBI_DB_MIGRATION_NAME=postgres
+export ZOMBI_DB_MIGRATION_TYPE=postgresql
+export ZOMBI_DB_MIGRATION_ENABLED=true
+export ZOMBI_DB_MIGRATION_UNSAFE=true
+
+# Cache
+export ZOMBI_CACHE_HOST=localhost
+export ZOMBI_CACHE_PORT=6379
+export ZOMBI_CACHE_PASS=none
+export ZOMBI_CACHE_TLS=false
+export ZOMBI_CACHE_LOAD_SCRIPTS=true
+
+# Miscellaneous
+export NODE_ENV=local
+export ZOMBI_SERVER_TIMEOUT=300000
+export ZOMBI_SERVER_SEND_ERROR_NOTIFICATIONS=no
+
+export ZOMBI_SERVER_ENDPOINT='/server'
+export ZOMBI_STORAGE_PATH='/tmp'
+
+# Client
+export ZOMBI_CLIENT_ENDPOINT='http://localhost:8000/server'
+export ZOMBI_CLIENT_QUEUE=TheBlackLambdaAQueue
+
+# Stats
+export ZOMBI_STATS_ENABLED=true
+
+# Logging
+export ZOMBI_LOG_LEVEL=TRACE
+export ZOMBI_LOG_PERSIST_CACHE=true
+export ZOMBI_LOG_PERSIST_FILES=true
+
+# Security
+export ZOMBI_AUTH_MODULE_ACCESS=false
+export ZOMBI_HIDE_SERVER_ERRORS=false
+export ZOMBI_AUTH_HEADER_KEY='z-internal-auth'
+export ZOMBI_AUTH_HEADER_VALUE=9959a1c23dcc98a7b3ca78dfd777d7ad
+export ZOMBI_AUTH_HEADER_EXTERNAL_KEY='z-external-auth'
+export ZOMBI_AUTH_REACTOR_TOKEN=azHIA1LEmYlGg7o3g5j3ca78dfdcx7m8ylbuuvf
+export ZOMBI_TEST_USER_NAME=system
+export ZOMBI_TEST_USER_PASSWORD=manager
+export ZOMBI_LOG_ARGUMENTS=true
+export ZOMBI_THROTTLING_ENABLED=false
+export ZOMBI_THROTTLING_LIMIT=100
+
+export ZOMBI_NOTIFICATIONS_EMAIL_USER=zombidevelopment@gmail.com
+export ZOMBI_NOTIFICATIONS_EMAIL_PASS=youdontknow
+export ZOMBI_NOTIFICATIONS_EMAIL_URL='http://localhost:8080/login.html'
+

@@ -92,24 +92,26 @@ export const handler = async (event: SQSEvent): Promise<void> => {
                 if (!bootstrap_done) {
 
                     bootstrap_done = true;
-            
-                    log.info("Starting handler", "lambda/handler", context);
-            
+
+                    log.info("Starting handler", "lambda/handler:queue", context);
+
                     codes.load(context);
-            
+
                     await cache.connect(context);
-            
+
                     await db.connect(context);
-            
+
                     await security.start(context, true);
-            
-                    log.debug(`Lambda bootstrap run time: ${bootstrap_end_time - bootstrap_start_time}ms`, "lambda/handler", context);
-            
-                    log.debug(`Lambda start time: ${Date.now() - start_time}ms`, "lambda/handler", context);
-            
+
+                    log.debug(`Lambda bootstrap run time: ${bootstrap_end_time - bootstrap_start_time}ms`, "lambda/handler:queue", context);
+
+                    log.debug(`Lambda start time: ${Date.now() - start_time}ms`, "lambda/handler:queue", context);
+
                 }
 
-                await execute(params, context);
+                const response = await execute(params, context);
+
+                log.trace(`Queue response: ${JSON.stringify({ status: response.status, origin: response.origin })}`, "lambda/handler:queue", context);
 
             } catch (error) {
 
