@@ -59,8 +59,9 @@ jobs:
 
       - name: "Run DB migrations"
         run: |
+          . .env/local
           cd migrations
-          . .env/local ; sudo -E ./migrations.sh migrate
+          sudo -E ./migrations.sh migrate
           cd ..
       - name: Run tests
         run: . .env/local ; npm run test
