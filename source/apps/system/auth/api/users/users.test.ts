@@ -113,8 +113,6 @@ describe("API Tests", () => {
             }
         );
 
-        console.log(response_1);
-
         expect(response_1.status.message).toEqual("ok");
         expect(response_1.status.code).toEqual(1000);
         expect(response_1.status.error).toEqual(false);
@@ -124,7 +122,7 @@ describe("API Tests", () => {
 
         await create_user();
 
-        const response_3 = await global_rpc_client.call(
+        const response_2 = await global_rpc_client.call(
             "system/auth",
             "users_list",
             {
@@ -132,9 +130,7 @@ describe("API Tests", () => {
             }
         );
 
-        console.log(response_3);
-
-        expect(response_3.data.count).toEqual(number_of_users + 1);
+        expect(response_2.data.count).toEqual(number_of_users + 1);
 
     });
 
@@ -152,8 +148,6 @@ describe("API Tests", () => {
             user_id
         );
 
-        console.log(response_2);
-
         expect(response_2.data).toEqual("Affected rows: 1");
 
         const response_3 = await global_rpc_client.call(
@@ -161,8 +155,6 @@ describe("API Tests", () => {
             "user_by_id",
             user_id
         );
-
-        console.log(response_3);
 
         expect(response_3.status.code).toEqual(1000);
         expect(response_3.status.error).toEqual(false);

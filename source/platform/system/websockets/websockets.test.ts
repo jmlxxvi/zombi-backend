@@ -31,8 +31,6 @@ describe("API Tests", () => {
 
     it("Sends WS message to session with mocked AWS", async () => {
 
-        console.log(await db.sql({ query: "select 2" }));
-
         (aws.send_ws_message as any).mockResolvedValue(undefined);
 
         const { username, password } = await create_user();

@@ -46,6 +46,8 @@ jobs:
           cd migrations
           sudo -E ./migrations.sh migrate
           cd ..
+      - name: Run linter
+        run: . .env/local ; npm run lint
       - name: Run tests
         run: . .env/local ; npm run test
   deploy_job:

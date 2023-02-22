@@ -32,8 +32,6 @@ describe("CLIENT Tests", () => {
 
     it("Responds with mocked loopback response", async () => {
 
-        console.log(config.client.endpoint);
-
         network_service_mock({
             url: config.client.endpoint,
             path: "/",

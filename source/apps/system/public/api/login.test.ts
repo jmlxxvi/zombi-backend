@@ -179,10 +179,6 @@ describe("API Tests", () => {
             "logoff",
         );
 
-        console.log(res);
-        console.log(res.status);
-        console.log(res.status.error);
-
         expect(res.status.error).toEqual(true);
         expect(res.status.code).toEqual(1002);
         expect(res.status.message).toEqual(expect.any(String));
