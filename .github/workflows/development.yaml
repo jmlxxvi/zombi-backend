@@ -75,8 +75,8 @@ jobs:
           node-version: 18.x
       - name: Creates the environment file
         run: mkdir .env ; printf "%s" "$DEVELOPMENT_ENV" > ".env/development"
-      # - name: Install dependencies
-      #   run: npm i
+      - name: Install dependencies
+        run: npm i
       - name: "Create SSH key from secret"
         # run: echo "${{ secrets.BASTION_SSH_KEY }}" | tr -d '\r' > key.pem; chmod 400 key.pem
         # run: |
@@ -94,7 +94,7 @@ jobs:
       - name: "Setting ZOMBI_DB_URL env"
         run: . .env/development ; echo "ZOMBI_DB_URL=${ZOMBI_DB_URL}" ; echo "ZOMBI_DB_URL=${ZOMBI_DB_URL}" >> $GITHUB_ENV
       - name: "Run DB migrations"
-        run: . .env/development ; ssh -v -i ./ssh_key ec2-user@${{ secrets.BASTION_HOST }} -C 'export ZOMBI_DB_URL="${{ env.ZOMBI_DB_URL }}"; rm -rf zombi-backend; git clone https://github.com/${{github.repository}}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate'
+        run: . .env/development ; ssh -i ./ssh_key ec2-user@${{ secrets.BASTION_HOST }} -C 'export ZOMBI_DB_URL="${{ env.ZOMBI_DB_URL }}"; rm -rf zombi-backend; git clone https://github.com/${{github.repository}}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate'
         # run: ssh -i ec2-key-dev.pem ec2-user@ec2-3-91-34-224.compute-1.amazonaws.com -C 'export ZOMBI_DB_URL="${{ secrets.ZOMBI_DB_URL }}"; rm -rf zombi-backend; git clone https://github.com/${{github.repository}}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate'
         # run: |
         #   cd migrations
