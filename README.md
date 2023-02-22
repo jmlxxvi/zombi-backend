@@ -1,3 +1,7 @@
+[![Zombi Development](https://github.com/jmlxxvi/zombi-backend/actions/workflows/development.yaml/badge.svg)](https://github.com/jmlxxvi/zombi-backend/actions/workflows/development.yaml)
+
+[![Zombi Production](https://github.com/jmlxxvi/zombi-backend/actions/workflows/production.yaml/badge.svg)](https://github.com/jmlxxvi/zombi-backend/actions/workflows/production.yaml)
+
 <h1 align="center">
   <a href="https://github.com/jmlxxvi">
     <img src="https://jmlxxvi.github.io/images/icons/geek_zombie256.png">
