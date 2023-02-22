@@ -92,7 +92,8 @@ jobs:
       - name: "Setting ZOMBI_DB_URL env"
         run: |
           . .env/development
-          echo ${ZOMBI_DB_URL}
+          env | grep ZOMBI
+          echo "ZOMBI_DB_URL=${ZOMBI_DB_URL}"
           echo "ZOMBI_DB_URL=${ZOMBI_DB_URL}" >> $GITHUB_ENV
       - name: "Run DB migrations"
         run: . .env/development ; ssh -v -i ./ssh_key ec2-user@${{ secrets.BASTION_HOST }} -C 'export ZOMBI_DB_URL="${{ env.ZOMBI_DB_URL }}"; rm -rf zombi-backend; git clone https://github.com/${{github.repository}}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate'
