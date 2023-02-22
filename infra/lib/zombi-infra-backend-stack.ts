@@ -28,6 +28,10 @@ function tagSubnets(subnets: ec2.ISubnet[], tagName: string, tagValue: string) {
   }
 }
 
+if (!process.env.APP_ID) {
+  throw new Error("Environment not set. See .env file");
+}
+
 export class ZombiInfraBackendStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
@@ -276,14 +280,15 @@ export class ZombiInfraBackendStack extends Stack {
       },
     });
 
-    const lambdaQueueFunctionUrl = lambdaQueueFunction.addFunctionUrl({
-      authType: lambda.FunctionUrlAuthType.NONE,
-      cors: {
-        allowedMethods: [lambda.HttpMethod.ALL],
-        allowedOrigins: ["*"],
-        maxAge: Duration.minutes(10)
-      }
-    });
+    // We need the URL only to debug or test
+    // const lambdaQueueFunctionUrl = lambdaQueueFunction.addFunctionUrl({
+    //   authType: lambda.FunctionUrlAuthType.NONE,
+    //   cors: {
+    //     allowedMethods: [lambda.HttpMethod.ALL],
+    //     allowedOrigins: ["*"],
+    //     maxAge: Duration.minutes(10)
+    //   }
+    // });
 
     const lambdaQueueFunctionQueue = new sqs.Queue(this, `${config.lambdas.queue.name}-queue`, {
       visibilityTimeout: Duration.seconds(900)
@@ -309,8 +314,8 @@ export class ZombiInfraBackendStack extends Stack {
     );
 
     new CfnOutput(this, "lambdaQueueFunctionName", { value: config.lambdas.queue.name });
-    new CfnOutput(this, "lambdaQueueFunctionUrl", { value: lambdaQueueFunctionUrl.url });
-    new CfnOutput(this, "lambdaQueueFunctionArn", { value: lambdaQueueFunctionUrl.functionArn });
+    // new CfnOutput(this, "lambdaQueueFunctionUrl", { value: lambdaQueueFunctionUrl.url });
+    new CfnOutput(this, "lambdaQueueFunctionArn", { value: lambdaQueueFunction.functionArn });
 
     // Reactor Lambda
 
@@ -337,14 +342,15 @@ export class ZombiInfraBackendStack extends Stack {
       },
     });
 
-    const lambdaReactorFunctionUrl = lambdaReactorFunction.addFunctionUrl({
-      authType: lambda.FunctionUrlAuthType.NONE,
-      cors: {
-        allowedMethods: [lambda.HttpMethod.ALL],
-        allowedOrigins: ["*"],
-        maxAge: Duration.minutes(10)
-      }
-    });
+    // We need the URL only to debug or test
+    // const lambdaReactorFunctionUrl = lambdaReactorFunction.addFunctionUrl({
+    //   authType: lambda.FunctionUrlAuthType.NONE,
+    //   cors: {
+    //     allowedMethods: [lambda.HttpMethod.ALL],
+    //     allowedOrigins: ["*"],
+    //     maxAge: Duration.minutes(10)
+    //   }
+    // });
 
     const eventRule = new events.Rule(this, "every10MinutesRule", {
       schedule: events.Schedule.cron({ minute: "0/10" }),
@@ -377,14 +383,13 @@ export class ZombiInfraBackendStack extends Stack {
     );
 
     new CfnOutput(this, "lambdaReactorFunctionName", { value: config.lambdas.reactor.name });
-    new CfnOutput(this, "lambdaReactorFunctionUrl", { value: lambdaReactorFunctionUrl.url });
-    new CfnOutput(this, "lambdaReactorFunctionArn", { value: lambdaReactorFunctionUrl.functionArn });
+    // new CfnOutput(this, "lambdaReactorFunctionUrl", { value: lambdaReactorFunctionUrl.url });
+    new CfnOutput(this, "lambdaReactorFunctionArn", { value: lambdaReactorFunction.functionArn });
 
     // -----------------
     // Websockets Lambda
     // -----------------
 
-    // const name = id + "-api"
     const lambdaWebsocketsFunctionApi = new CfnApi(this, `${config.lambdas.websockets.name}-api`, {
       name: `${config.lambdas.websockets.name}-api`,
       protocolType: "WEBSOCKET",
@@ -530,14 +535,15 @@ export class ZombiInfraBackendStack extends Stack {
       },
     });
 
-    const lambdaFilesFunctionUrl = lambdaFilesFunction.addFunctionUrl({
-      authType: lambda.FunctionUrlAuthType.NONE,
-      cors: {
-        allowedMethods: [lambda.HttpMethod.ALL],
-        allowedOrigins: ["*"],
-        maxAge: Duration.minutes(10)
-      }
-    });
+    // We need the URL only to debug or test
+    // const lambdaFilesFunctionUrl = lambdaFilesFunction.addFunctionUrl({
+    //   authType: lambda.FunctionUrlAuthType.NONE,
+    //   cors: {
+    //     allowedMethods: [lambda.HttpMethod.ALL],
+    //     allowedOrigins: ["*"],
+    //     maxAge: Duration.minutes(10)
+    //   }
+    // });
 
     // Adding permission to Redis for the lambda
     redisSecurityGroup.connections.allowFrom(
@@ -556,8 +562,8 @@ export class ZombiInfraBackendStack extends Stack {
     );
 
     new CfnOutput(this, "lambdaFilesFunctionName", { value: config.lambdas.files.name });
-    new CfnOutput(this, "lambdaFilesFunctionUrl", { value: lambdaFilesFunctionUrl.url });
-    new CfnOutput(this, "lambdaFilesFunctionArn", { value: lambdaFilesFunctionUrl.functionArn });
+    // new CfnOutput(this, "lambdaFilesFunctionUrl", { value: lambdaFilesFunctionUrl.url });
+    new CfnOutput(this, "lambdaFilesFunctionArn", { value: lambdaFilesFunction.functionArn });
 
     // -------
     // CI User
@@ -569,27 +575,6 @@ export class ZombiInfraBackendStack extends Stack {
     });
 
     new CfnOutput(this, "ciUserUserName", { value: ciUser.userName });
-
-    // Policy
-    // const updateLambdasCodePolicy = new iam.PolicyDocument({
-    //   statements: [
-    //     new iam.PolicyStatement({
-    //       resources: [
-    //         lambdaServerFunction.functionArn,
-    //         lambdaQueueFunction.functionArn,
-    //         lambdaReactorFunction.functionArn,
-    //         lambdaWebsocketsFunction.functionArn,
-    //         lambdaFilesFunction.functionArn,
-    //       ],
-    //       actions: ["lambda:UpdateFunctionCode"],
-    //     }),
-    // new iam.PolicyStatement({
-    //   resources: [CodeBucket.bucketArn],
-    //   actions: ["s3:GetObject"],
-    // }),
-    //   ],
-    // });
-
 
     ciUser.addToPolicy(new iam.PolicyStatement({
       resources: [
@@ -612,8 +597,6 @@ export class ZombiInfraBackendStack extends Stack {
       userName: ciUser.userName,
     });
 
-    // new CfnOutput(this, 'accessKeyId', { value: ciAccessKey.accessKeyId });
-    // new CfnOutput(this, 'secretAccessKey', { value: ciAccessKey.accessKeySecretAccessKey });
     new CfnOutput(this, 'ciAccessKeysecretAccessKey', { value: ciAccessKey.attrSecretAccessKey });
     new CfnOutput(this, "ciAccessKeyId", { value: ciAccessKey.ref });
   }

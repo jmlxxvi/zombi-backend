@@ -17,20 +17,19 @@ export DBMATE_WAIT=true
 export DBMATE_WAIT_TIMEOUT=10s
 export DATABASE_URL=${ZOMBI_DB_URL}?sslmode=disable
 
+OSTYPE="$(uname -s)"
+case "${OSTYPE}" in
+    Darwin*)    BIN=./bin/macos/dbmate-macos-amd64;;
+    *)          BIN=./bin/linux/dbmate-linux-amd64;;
+esac
+
+echo "Binary file is ${BIN}"
+
 echo "Connecting to ${DATABASE_URL}"
 
-# To run locally (without Docker)
-BIN=./bin/dbmate
-# MIGRATIONS_DIR=${SCRIPT_DIR}/migrations
-# MIGRATIONS_TABLE=schema_migrations
-# ${BIN} --url=${ZOMBI_DB_URL} --migrations-dir=${MIGRATIONS_DIR} --migrations-table=${MIGRATIONS_TABLE} "$@"
-# ${BIN} --url="${ZOMBI_DB_URL}?sslmode=disable" "$@"
 ${BIN} "$@"
 
-
-
-
-
+# To run with Docker
 # docker run --rm --network=host -v "$(pwd)/db:/db" \
 #     -e DATABASE_URL=${ZOMBI_DB_URL}?sslmode=disable \
 #     -e DBMATE_MIGRATIONS_DIR=${DBMATE_MIGRATIONS_DIR} \
