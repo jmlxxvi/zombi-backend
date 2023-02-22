@@ -24,11 +24,11 @@ const error_type = (level: number) => {
     let error_type_label: string;
 
     switch (level) {
-    case 1: error_type_label = "ERROR"; break;
-    case 2: error_type_label = "INFO"; break;
-    case 3: error_type_label = "DEBUG"; break;
-    case 4: error_type_label = "TRACE"; break;
-    default: error_type_label = "NONE"; break;
+        case 1: error_type_label = "ERROR"; break;
+        case 2: error_type_label = "INFO"; break;
+        case 3: error_type_label = "DEBUG"; break;
+        case 4: error_type_label = "TRACE"; break;
+        default: error_type_label = "NONE"; break;
     }
 
     return error_type_label;
@@ -41,11 +41,11 @@ const error_icon = (level: number) => {
 
     if (config.log.show_icons) {
         switch (level) {
-        case 1: log_icon = "🔴"; break;
-        case 2: log_icon = "🟢"; break;
-        case 3: log_icon = "🔵"; break;
-        case 4: log_icon = "🟣"; break;
-        default: log_icon = "🟢"; break;
+            case 1: log_icon = "🔴"; break;
+            case 2: log_icon = "🟢"; break;
+            case 3: log_icon = "🔵"; break;
+            case 4: log_icon = "🟣"; break;
+            default: log_icon = "🟢"; break;
         }
         log_icon += " ";
     }
@@ -80,7 +80,7 @@ const _log = async (message: ZombiLogErrorMessage, subject = "UNKNOWN", level: n
         } else { msg = "Incorrect message type for logging"; }
 
         const error_type_console = error_type(level);
-        
+
         const error_icon_console = error_icon(level);
 
         console.log(`${error_icon_console}${error_type_console} ${message_timestamp} [${rid}] [${subject}] ${msg.replace(/(?:\r\n|\r|\n)/g, "")} [${delta_ts.toString()}]`);

@@ -36,11 +36,9 @@ const users_list = async (args: InputSystemAuthUsersList, context: ZombiExecuteC
 
     const validation = validate_schema(users_list_input_schema, args);
 
-    console.log(args);
-
     if (validation.valid) {
 
-        const { search = "%", order_col = 1, order_dir = "asc", page, size = 10 } = args;
+        const { search = "%", order_col = 1, order_dir = "asc", page = 1, size = 10 } = args;
 
         const query = `select
                             usr.id,
@@ -63,11 +61,9 @@ const users_list = async (args: InputSystemAuthUsersList, context: ZombiExecuteC
                             lower(usr.email) like concat('%', concat(lower(:search), '%'))
                         )`;
 
-        console.log(query);
-
         const query_count = `select count(*) as cnt from (${query}) inq`;
 
-        const data_count = await db.sql<{ cnt: number }>({ query: query_count, bind: [search, search, search] });
+        const data_count = await db.sql<{ cnt: string }>({ query: query_count, bind: [search, search, search] });
 
         // const query = await db.file(`${app_config.basedir}/auth/api/users/sql/users_table.sql`);
 
@@ -82,7 +78,7 @@ const users_list = async (args: InputSystemAuthUsersList, context: ZombiExecuteC
             error: false,
             code: 1000,
             data: {
-                count: data_count[0].cnt,
+                count: parseInt(data_count[0].cnt),
                 rows: data_rows
             }
         };

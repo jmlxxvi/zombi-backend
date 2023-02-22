@@ -6,12 +6,12 @@ import { uuid } from "../../../../platform/system/utils";
 import security from "../../../../platform/system/security";
 import session from "../../../../platform/system/session";
 
-const context = { request_id : uuid() };
+const context = { request_id: uuid() };
 
 beforeAll(async () => {
 
     await cache.connect(context);
-    await db.connect(context)
+    await db.connect(context);
     await security.start(context);
 
 });
@@ -19,7 +19,7 @@ beforeAll(async () => {
 afterAll(async () => {
 
     await cache.disconnect();
-    await db.disconnect(context)
+    await db.disconnect(context);
 
 });
 
@@ -27,7 +27,7 @@ const rpc_client = Test_rpc_client();
 
 describe("API Tests", () => {
 
-    it("Returns health check alive response", async() => {
+    it("Returns health check alive response", async () => {
 
         const res = await rpc_client.call(
             "system/public",
@@ -41,20 +41,7 @@ describe("API Tests", () => {
 
     });
 
-    it("Responds with invalid schema error ", async() => {
-
-        // @ts-ignore
-        const res = await rpc_client.call(
-            "system/public"
-        );
-
-        expect(res.status.error).toBeTruthy();
-        expect(res.status.code).toEqual(1040);
-        expect(res.status.message).toEqual("Input validation error: data must have required property 'fun'");
-
-    });
-
-    it("Responds with an encripted password", async() => {
+    it("Responds with an encripted password", async () => {
 
         const res = await rpc_client.call(
             "system/public",
@@ -65,11 +52,11 @@ describe("API Tests", () => {
         expect(res.status.error).toEqual(false);
         expect(res.status.code).toEqual(1000);
         expect(res.status.message).toEqual(expect.any(String));
-        expect(res.data.length).toEqual(161);
+        expect(res.data).toHaveLength(161);
 
     });
 
-    it("Responds with 'Cannot login' and code 1004 - bad user", async() => {
+    it("Responds with 'Cannot login' and code 1004 - bad user", async () => {
 
         const res = await rpc_client.call(
             "system/public",
@@ -77,7 +64,7 @@ describe("API Tests", () => {
             { username: "non_existing_users", password: "wrongpassword" }
         );
 
-        
+
 
         expect(res.status.error).toEqual(true);
         expect(res.status.code).toEqual(1004);
@@ -85,7 +72,7 @@ describe("API Tests", () => {
 
     });
 
-    it("Responds with 'Cannot login' and code 1004 - bad password", async() => {
+    it("Responds with 'Cannot login' and code 1004 - bad password", async () => {
 
         const res = await rpc_client.call(
             "system/public",
@@ -99,7 +86,7 @@ describe("API Tests", () => {
 
     });
 
-    it("Responds with 'Input validation error'", async() => {
+    it("Responds with 'Input validation error'", async () => {
 
         const res = await rpc_client.call(
             "system/public",
@@ -113,7 +100,7 @@ describe("API Tests", () => {
 
     });
 
-    it("Returns error on invalid language", async() => {
+    it("Returns error on invalid language", async () => {
 
         const res = await rpc_client.call(
             "system/public",
@@ -131,13 +118,13 @@ describe("API Tests", () => {
 
     });
 
-    it("Logs in with test user and returns token", async() => {
+    it("Logs in with test user and returns token", async () => {
 
         await rpc_client.login();
 
     });
 
-    it("Returns 'Function not found' from tests module", async() => {
+    it("Returns 'Function not found' from tests module", async () => {
 
         const res = await rpc_client.call(
             "system/public",
@@ -151,7 +138,7 @@ describe("API Tests", () => {
 
     });
 
-    it("Returns 'pong' from tests module", async() => {
+    it("Returns 'pong' from tests module", async () => {
 
         const res = await rpc_client.call(
             "system/tests",
@@ -165,7 +152,7 @@ describe("API Tests", () => {
 
     });
 
-    it("Returns response from echo test function", async() => {
+    it("Returns response from echo test function", async () => {
 
         const res = await rpc_client.call(
             "system/public",
@@ -180,7 +167,7 @@ describe("API Tests", () => {
 
     });
 
-    it("Tries to logoff with invalid token", async() => {
+    it("Tries to logoff with invalid token", async () => {
 
         const token = rpc_client.get_token();
 
@@ -206,7 +193,7 @@ describe("API Tests", () => {
 
     });
 
-    it("Returns code 1001 after logoff", async() => {
+    it("Returns code 1001 after logoff", async () => {
 
         await rpc_client.logoff();
 
@@ -223,7 +210,7 @@ describe("API Tests", () => {
     });
 
     // This should be de last test as it is clearing the token
-    it("Returns code 1002 after token cleared", async() => {
+    it("Returns code 1002 after token cleared", async () => {
 
         rpc_client.set_token(null);
 

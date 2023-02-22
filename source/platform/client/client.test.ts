@@ -32,9 +32,11 @@ describe("CLIENT Tests", () => {
 
     it("Responds with mocked loopback response", async () => {
 
+        console.log(config.client.endpoint);
+
         network_service_mock({
             url: config.client.endpoint,
-            path: "",
+            path: "/",
             method: "POST",
             reply_http_code: 200,
             reply_http_body: {
@@ -75,13 +77,13 @@ describe("CLIENT Tests", () => {
             MessageId: "12345"
         });
 
-        const response = await queue({ 
+        const response = await queue({
             data: {
                 "token": "{{token}}",
                 "mod": "sandbox/bucket",
                 "fun": "ohno",
                 "args": "America/Argentina/Salta"
-            }, 
+            },
             queue: "test_queue",
             request_id
         });
@@ -94,13 +96,13 @@ describe("CLIENT Tests", () => {
 
         (aws.sqs.send_message as any).mockResolvedValue({});
 
-        const response = await queue({ 
+        const response = await queue({
             data: {
                 "token": "{{token}}",
                 "mod": "sandbox/bucket",
                 "fun": "ohno",
                 "args": "America/Argentina/Salta"
-            }, 
+            },
             queue: "test_queue",
             request_id
         });

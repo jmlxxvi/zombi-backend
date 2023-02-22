@@ -19,7 +19,7 @@ const restricted_path_zones = [
     {
         "target": "source/platform/**/*",
         "from": "source/server/**/*",
-        "except": ["**/types.ts"]
+        "except": ["**/types.ts", "**/input.json", "**/output.json"]
     },
     {
         "target": "source/apps/**/*",
@@ -46,6 +46,7 @@ module.exports = {
     "root": true,
     "parser": "@typescript-eslint/parser",
     "plugins": [
+        "jest", // https://github.com/jest-community/eslint-plugin-jest
         "import",
         "deprecation",
         "@typescript-eslint"
@@ -62,7 +63,7 @@ module.exports = {
         "node": true
     },
     "ignorePatterns": [
-        "*.test.ts",
+        // "*.test.ts",
         "build/",
         ".*",
         "jest.*"
@@ -73,6 +74,11 @@ module.exports = {
         "project": "./tsconfig.json",
     },
     "rules": {
+        "jest/no-disabled-tests": "warn",
+        "jest/no-focused-tests": "error",
+        "jest/no-identical-title": "error",
+        "jest/prefer-to-have-length": "warn",
+        "jest/valid-expect": "error",
         "indent": ["error", 4, { "SwitchCase": 1 }],
         "linebreak-style": ["error", "unix"],
         "quotes": ["error", "double"],

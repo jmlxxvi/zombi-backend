@@ -83,7 +83,7 @@ export const create_user = async (user = {}, options = {}) => {
     expect(response.status.error).toEqual(false);
     expect(response.status.code).toEqual(1000);
     expect(response.status.message).toEqual("ok");
-    expect(validate_uuid(response.data)).toBeTruthy;
+    expect(validate_uuid(response.data)).toBeTruthy();
 
     const user_id = response.data;
 
@@ -165,7 +165,7 @@ export const create_user = async (user = {}, options = {}) => {
                 "groups_add_user",
                 { user_id, group_id }
             );
-    
+
             if (response2?.status?.error) { console.error(response2); }
             expect(response2.status.error).toEqual(false);
             expect(response2.status.code).toEqual(1000);
@@ -236,7 +236,7 @@ export const create_group = async (group = {}) => {
     expect(response.status.error).toEqual(false);
     expect(response.status.code).toEqual(1000);
     expect(response.status.message).toEqual("ok");
-    expect(validate_uuid(response.data)).toBeTruthy;
+    expect(validate_uuid(response.data)).toBeTruthy();
 
     const group_id = response.data;
 
@@ -286,7 +286,7 @@ export const create_session = async (options = {}) => {
         push_notifications_token: base_user.push_notifications_token,
     };
 
-    const session_timestamp = await session.create({ token: base_user.token, data: session_data, context: { request_id: uuid() }});
+    const session_timestamp = await session.create({ token: base_user.token, data: session_data, context: { request_id: uuid() } });
 
     return session_timestamp;
 
@@ -295,7 +295,7 @@ export const create_session = async (options = {}) => {
 export const network_service_mock = ({
     url,
     method = "POST",
-    path,
+    path = "/",
     reply_http_code = 200,
     reply_http_body
 }: {

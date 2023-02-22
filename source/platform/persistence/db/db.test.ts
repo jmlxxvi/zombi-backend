@@ -11,12 +11,12 @@ const db_type = url_parts.protocol.replace(":", "");
 const test_table = "TESTING_TABLE_3156232";
 
 type SelectType = {
-    id: number, 
-    a: number, 
-    b: string, 
+    id: number,
+    a: number,
+    b: string,
     c: string,
-    A: number, 
-    B: string, 
+    A: number,
+    B: string,
     C: string
 }
 
@@ -107,7 +107,7 @@ describe("DB Tests", () => {
                             ELSE
                                 RAISE;
                             END IF;
-                        END;`
+                        END;`;
                 break;
 
             default:
@@ -144,7 +144,7 @@ describe("DB Tests", () => {
             query: `select a as "A", b as "B" from ${test_table}`
         });
 
-        expect(response.length).toEqual(2);
+        expect(response).toHaveLength(2);
 
         expect(response[0].A).toEqual(999);
         expect(response[0].B).toMatch("Test Data");
@@ -160,7 +160,7 @@ describe("DB Tests", () => {
         });
 
 
-        expect(response.length).toEqual(1);
+        expect(response).toHaveLength(1);
 
         expect(response[0].A).toEqual(999);
         expect(response[0].B).toMatch("Test Data");
@@ -180,7 +180,7 @@ describe("DB Tests", () => {
         });
 
 
-        expect(response.length).toEqual(1);
+        expect(response).toHaveLength(1);
 
         expect(response[0].A).toEqual(999);
         expect(response[0].B).toMatch("Test Data");
@@ -228,7 +228,7 @@ describe("DB Tests", () => {
         });
 
 
-        expect(response.length).toEqual(0);
+        expect(response).toHaveLength(0);
     });
 
     it("Selects (R) from test table non existent row", async () => {
@@ -237,7 +237,7 @@ describe("DB Tests", () => {
             bind: [1000]
         }));
 
-        expect(response).toBeNull;
+        expect(response).toBeNull();
     });
 
     it("Selects (V) from test table non existent row", async () => {
@@ -246,7 +246,7 @@ describe("DB Tests", () => {
             bind: [1000]
         }));
 
-        expect(response).toBeNull;
+        expect(response).toBeNull();
     });
 
     it("Selects (R) from test table existent row", async () => {
@@ -255,7 +255,7 @@ describe("DB Tests", () => {
             bind: [999]
         }));
 
-        expect(response).not.toBeNull;
+        expect(response).not.toBeNull();
         expect(response!.A).toEqual(999);
         expect(response!.B).toMatch("Test Data");
     });
@@ -266,7 +266,7 @@ describe("DB Tests", () => {
             bind: [999]
         }));
 
-        expect(response).not.toBeNull;
+        expect(response).not.toBeNull();
 
         expect(response).toEqual(999);
     });
@@ -277,7 +277,7 @@ describe("DB Tests", () => {
             bind: [999]
         }));
 
-        expect(response).not.toBeNull;
+        expect(response).not.toBeNull();
         expect(response).toEqual(expect.any(String));
         expect(response).toMatch("Test Data");
     });
@@ -288,7 +288,7 @@ describe("DB Tests", () => {
             bind: [999]
         }));
 
-        expect(response).toBeNull;
+        expect(response).toBeNull();
     });
 
     it("Deletes from test table without where", async () => {
@@ -330,7 +330,7 @@ describe("DB Tests", () => {
             }
         });
 
-        expect(response.length).toEqual(2);
+        expect(response).toHaveLength(2);
 
         expect(response[0].a || response[0].A).toEqual(1001);
         expect(response[0].b || response[0].B).toMatch("Test Data F1");
@@ -348,7 +348,7 @@ describe("DB Tests", () => {
             }
         });
 
-        expect(response.length).toEqual(2);
+        expect(response).toHaveLength(2);
 
         expect(response[0].a || response[0].A).toEqual(1002);
         expect(response[0].b || response[0].B).toMatch("Test Data F2");
@@ -367,7 +367,7 @@ describe("DB Tests", () => {
             }
         });
 
-        expect(response.length).toEqual(2);
+        expect(response).toHaveLength(2);
 
         expect(response[0].a || response[0].A).toEqual(1001);
         expect(response[0].b || response[0].B).toMatch("Test Data F1");
@@ -383,7 +383,7 @@ describe("DB Tests", () => {
             order_by: [1, 2]
         });
 
-        expect(response.length).toEqual(2);
+        expect(response).toHaveLength(2);
 
         expect(response[0].a || response[0].A).toEqual(1001);
         expect(response[0].b || response[0].B).toMatch("Test Data F1");
@@ -401,7 +401,7 @@ describe("DB Tests", () => {
 
 
 
-        expect(response.length).toEqual(2);
+        expect(response).toHaveLength(2);
 
         expect(response[0].a || response[0].A).toEqual(1001);
         expect(response[0].b || response[0].B).toMatch("Test Data F1");
@@ -419,7 +419,7 @@ describe("DB Tests", () => {
 
 
 
-        expect(response.length).toEqual(2);
+        expect(response).toHaveLength(2);
 
         expect(response[0].a || response[0].A).toEqual(1001);
         expect(response[0].b || response[0].B).toMatch("Test Data F1");
@@ -438,7 +438,7 @@ describe("DB Tests", () => {
             }
         });
 
-        expect(response.length).toEqual(2);
+        expect(response).toHaveLength(2);
 
         expect(response[0].a || response[0].A).toEqual(1002);
         expect(response[0].b || response[0].B).toMatch("Test Data F2");
@@ -456,7 +456,7 @@ describe("DB Tests", () => {
             }
         });
 
-        expect(response.length).toEqual(1);
+        expect(response).toHaveLength(1);
 
         expect(response[0].a || response[0].A).toEqual(1001);
         expect(response[0].b || response[0].B).toMatch("Test Data F1");
@@ -471,7 +471,7 @@ describe("DB Tests", () => {
             }
         });
 
-        expect(response.length).toEqual(1);
+        expect(response).toHaveLength(1);
 
         expect(response[0].a || response[0].A).toBeUndefined();
         expect(response[0].b || response[0].B).toMatch("Test Data F1");
@@ -486,7 +486,7 @@ describe("DB Tests", () => {
             }
         });
 
-        expect(response.length).toEqual(1);
+        expect(response).toHaveLength(1);
         expect(response[0].a || response[0].A).toBeUndefined();
         expect(response[0].b || response[0].B).toMatch("Test Data F1");
     });
@@ -500,7 +500,7 @@ describe("DB Tests", () => {
             }
         });
 
-        expect(response.length).toEqual(1);
+        expect(response).toHaveLength(1);
         expect(response[0].a || response[0].A).toEqual(1001);
         expect(response[0].b || response[0].B).toMatch("Test Data F1");
     });
@@ -512,7 +512,7 @@ describe("DB Tests", () => {
             where: ["a", 1001]
         });
 
-        expect(response.length).toEqual(1);
+        expect(response).toHaveLength(1);
         expect(response[0].a || response[0].A).toEqual(1001);
         expect(response[0].b || response[0].B).toMatch("Test Data F1");
     });
@@ -524,7 +524,7 @@ describe("DB Tests", () => {
             where: 202
         });
 
-        expect(response.length).toEqual(1);
+        expect(response).toHaveLength(1);
         expect(response[0].a || response[0].A).toEqual(1001);
         expect(response[0].b || response[0].B).toMatch("Test Data F1");
     });
@@ -552,7 +552,7 @@ describe("DB Tests", () => {
             }
         });
 
-        expect(response.length).toEqual(1);
+        expect(response).toHaveLength(1);
         expect(response[0].b || response[0].B).toMatch("Test Data F1 Updated");
     });
 
@@ -579,7 +579,7 @@ describe("DB Tests", () => {
     });
 
 
-    it("Deletes from test table without where", async () => {
+    it("Deletes from test table without where again", async () => {
         const response = await db.sql<any>({ query: `delete from ${test_table}` });
 
         expect(response[0]).toHaveProperty("rows", 1);
@@ -659,7 +659,7 @@ describe("DB Tests", () => {
             }
         });
 
-        expect(response.length).toEqual(1);
+        expect(response).toHaveLength(1);
     });
 
     it("Selects rows from the table with where clause using SQL functions and negate operator (array)", async () => {
@@ -668,7 +668,7 @@ describe("DB Tests", () => {
             where: ["!a", 99999999]
         });
 
-        expect(response.length).toEqual(3);
+        expect(response).toHaveLength(3);
     });
 
     it("Counts the rows of the table with where clause using SQL functions and negate operator (object)", async () => {
@@ -810,22 +810,10 @@ describe("DB Tests", () => {
     });
 
     it("Gets sequence numbers using SQL functions", async () => {
-        switch (db_type) {
-            case "postgresql":
-            case "oracle":
-                const response1 = await db.sequence();
-                const response2 = await db.sequence();
+        const response1 = await db.sequence();
+        const response2 = await db.sequence();
 
-                expect(response2).toEqual(response1 + 1);
-                break;
-
-            case "mysql":
-                // No sequences yet for MySQL
-                break;
-
-            default:
-                throw new Error("Invalid DB type");
-        }
+        expect(response2).toEqual(response1 + 1);
     });
 
     it("Drops test table and returns standard object", async () => {
@@ -853,7 +841,7 @@ describe("DB Tests", () => {
 
         const response4 = normalize_bind(undefined);
         expect(response4).toEqual([]);
-        
+
     });
 
 });

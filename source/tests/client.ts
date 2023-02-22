@@ -31,7 +31,7 @@ export function Test_rpc_client() {
             mod,
             fun,
         };
-    
+
         if (args) {
             params.args = args;
         }
@@ -39,18 +39,20 @@ export function Test_rpc_client() {
         if (_token) {
             params.token = _token;
         }
-    
+
         if (token) {
             params.token = token;
         }
-    
+
         const context: ZombiExecuteContextData = {
             request_id,
             remote_ip,
             executor_uuid,
         };
-    
+
         const response = await execute(params, context);
+
+        if (response?.status?.error) { console.error(response); }
 
         return response;
 
@@ -60,27 +62,27 @@ export function Test_rpc_client() {
 
         const username = params?.username ?? process.env.ZOMBI_TEST_USER_NAME;
         const password = params?.password ?? process.env.ZOMBI_TEST_USER_PASSWORD;
-    
+
         const response = await call(
             "system/public",
             "login",
             { username, password }
         );
-    
+
         if (response?.status?.error) { console.error(response); }
-    
+
         expect(response.status.error).toEqual(false);
         expect(response.status.code).toEqual(1000);
         expect(response.data.token.length).toEqual(config.security.token_size * 2);
-    
+
         _token = response.data.token;
-    
+
         return { token: _token };
-    
+
     }
 
     async function logoff() {
-    
+
         const response = await call(
             "system/public",
             "logoff",
@@ -90,7 +92,7 @@ export function Test_rpc_client() {
 
         expect(response.status.error).toEqual(false);
         expect(response.status.code).toEqual(1000);
-    
+
     }
 
     return {

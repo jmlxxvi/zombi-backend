@@ -1,5 +1,5 @@
 import config from "../../config";
-import { random_hexa_chars, timestamp, uuid } from "../utils";
+import { timestamp, uuid } from "../utils";
 import { validate_schema } from "../utils/validators";
 import security from ".";
 
@@ -14,19 +14,20 @@ const ts = timestamp();
 const executor = uuid();
 const request_id = uuid();
 
-const context = { request_id : uuid() };
+const context = { request_id: uuid() };
 
 beforeAll(async () => {
 
     await cache.connect(context);
     await db.connect(context);
+    await security.start({ request_id }, true);
 
 });
 
 afterAll(async () => {
 
     await cache.disconnect();
-    await db.disconnect(context)
+    await db.disconnect(context);
 
 });
 
@@ -34,7 +35,7 @@ describe("SECURITY Tests", () => {
 
     it("Returns a list of modules", async () => {
 
-        const modules = await security.modules_list()
+        const modules = await security.modules_list();
         expect(modules).not.toBeNull();
 
     });
@@ -251,8 +252,7 @@ describe("SECURITY Tests", () => {
     it("Returns error on response validation - 1", async () => {
 
         const response = "";
-            
-        // @ts-ignore
+
         const validated = validate_schema(output_schema, response);
 
         expect(validated.valid).toBeFalsy();
@@ -354,7 +354,7 @@ describe("SECURITY Tests", () => {
     });
 
     it("Returns error on response validation - 8", async () => {
-        
+
         const response = {
             "origin": "this/is/the:fun",
             "status": {
@@ -592,7 +592,7 @@ describe("SECURITY Tests", () => {
                 "request_id": request_id,
                 "executor": executor,
             },
-            "data": {"an": "object"},
+            "data": { "an": "object" },
         };
 
         const validated = validate_schema(output_schema, response);
@@ -735,5 +735,5 @@ describe("SECURITY Tests", () => {
 
         config.security.authorize_modules = old_config;
     });
-    
+
 });

@@ -8,6 +8,5 @@
         "order_dir": { "type": "string" },
         "page": { "type": "number" },
         "size": { "type": "number" }
-    },
-    "required": ["page"]
+    }
 }

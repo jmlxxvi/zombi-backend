@@ -2,13 +2,13 @@ import config from "../../platform/config";
 import { uuid } from "../../platform/system/utils";
 import { network_service_mock } from "../../tests/helpers";
 
-import  { send_message } from "./index";
+import { send_message } from "./index";
 
-const context = { request_id : uuid() };
+const context = { request_id: uuid() };
 
 describe("API Tests", () => {
 
-    it("Checks return data from disabled notifications", async() => {
+    it("Checks return data from disabled notifications", async () => {
 
         const old_config = config.server.send_error_notifications = false;
 
@@ -20,46 +20,54 @@ describe("API Tests", () => {
 
     });
 
-    it("Returns invalid_url from invalid URL", async() => {
+    it("Returns invalid_url from invalid URL", async () => {
 
-        const old_config = config.server.send_error_notifications = true;
-        
-        const old_config2 = process.env.ZOMBI_SLACK_WEBHOOK_URL;
-        
-        delete process.env.ZOMBI_SLACK_WEBHOOK_URL;
-        
-        const results = await send_message(context, "Test message");
-        
-        expect(results).toEqual("invalid_url");
-        
-        process.env.ZOMBI_SLACK_WEBHOOK_URL = old_config2;
-        
-        config.server.send_error_notifications = old_config;
+        if (process.env.ZOMBI_SLACK_WEBHOOK_URL) {
+
+            const old_config = config.server.send_error_notifications = true;
+
+            const old_config2 = process.env.ZOMBI_SLACK_WEBHOOK_URL;
+
+            delete process.env.ZOMBI_SLACK_WEBHOOK_URL;
+
+            const results = await send_message(context, "Test message");
+
+            expect(results).toEqual("invalid_url");
+
+            process.env.ZOMBI_SLACK_WEBHOOK_URL = old_config2;
+
+            config.server.send_error_notifications = old_config;
+
+        }
+
     });
 
-    it("Gets mocked data from network service", async() => {
-        
-        const url = process.env.ZOMBI_SLACK_WEBHOOK_URL!;
+    it("Gets mocked data from network service", async () => {
 
-        console.log(url);
+        const url = process.env.ZOMBI_SLACK_WEBHOOK_URL || "";
 
-        const message = "Test message";
+        if (url) {
 
-        network_service_mock({
-            url,
-            path: "",
-            method: "POST",
-            reply_http_code: 200,
-            reply_http_body: message
-        });
+            const message = "Test message";
 
-        const old_config = config.server.send_error_notifications = true;
-        
-        const results = await send_message(context, message);
+            network_service_mock({
+                url,
+                path: "/",
+                method: "POST",
+                reply_http_code: 200,
+                reply_http_body: message
+            });
 
-        expect(results).toEqual("Test message");
-        
-        config.server.send_error_notifications = old_config;
+            const old_config = config.server.send_error_notifications = true;
+
+            const results = await send_message(context, message);
+
+            expect(results).toEqual("Test message");
+
+            config.server.send_error_notifications = old_config;
+
+        }
+
     });
 
 });

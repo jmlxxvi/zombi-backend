@@ -43,7 +43,7 @@ describe("CACHE Tests", () => {
         const response7 = cache.is_connected();
         expect(response7).toEqual(false);
 
-        const response8 = await cache.fun(cache_key_1, async () => {}, 10);
+        const response8 = await cache.fun(cache_key_1, async () => { console.log("ok"); }, 10);
         expect(response8).toEqual(false);
 
         const response9 = await cache.increment_by(cache_key_1);
@@ -118,8 +118,8 @@ describe("CACHE Tests", () => {
 
     it("Set value of empty key with cache.generic", async () => {
         const response = await cache.generic(
-            "INCRBY", 
-            cache_key_3, 
+            "INCRBY",
+            cache_key_3,
             12
         );
 
@@ -128,8 +128,8 @@ describe("CACHE Tests", () => {
 
     it("Set value of key with cache.generic", async () => {
         const response = await cache.generic(
-            "INCRBY", 
-            cache_key_3, 
+            "INCRBY",
+            cache_key_3,
             2
         );
 
@@ -139,8 +139,8 @@ describe("CACHE Tests", () => {
 
     it("Set value of key with cache.generic for a non existen operation", async () => {
         const response = await cache.generic(
-            "BAD_OPERATION", 
-            cache_key_3, 
+            "BAD_OPERATION",
+            cache_key_3,
             2
         );
 

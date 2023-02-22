@@ -31,9 +31,9 @@ describe("SESSION Tests", () => {
 
         const session_timestamp = await create_session({
             user_id: test_user_id,
-            token: token_key, 
+            token: token_key,
             data: { user_id: test_user_id }
-        })
+        });
 
         expect(session_timestamp).toEqual(expect.any(Number));
         expect(session_timestamp).toBeLessThanOrEqual(ts);
@@ -120,14 +120,14 @@ describe("SESSION Tests", () => {
             token: token_key,
             user_id: test_user_id
         });
-        
+
         expect(session_timestamp).toEqual(expect.any(Number));
         expect(session_timestamp).toBeLessThanOrEqual(ts);
     });
 
     it("Rechecks session returns user ID", async () => {
         const session_data = await session.get(token_key, "user_id");
-        
+
         expect(session_data).toEqual(expect.any(String));
         expect(session_data).toEqual(test_user_id.toString());
 
@@ -155,7 +155,7 @@ describe("SESSION Tests", () => {
     });
 
     it("Checks the results of multi_set() with undefined token", async () => {
-        const session_data = await session.multi_set(undefined, {key: "value"});
+        const session_data = await session.multi_set(undefined, { key: "value" });
 
         expect(session_data).toEqual(null);
 
@@ -178,7 +178,7 @@ describe("SESSION Tests", () => {
 
     it("Expires all sessions and checks session is gone", async () => {
 
-        await session.expire({ period: 0, context: { request_id: "test", token: token_key }});
+        await session.expire({ period: 0, context: { request_id: "test", token: token_key } });
 
         const session_data = await session.get(token_key, "user_id");
 
@@ -187,7 +187,7 @@ describe("SESSION Tests", () => {
 
     it("Expires all sessions with default period and checks session is gone", async () => {
 
-        await session.expire({ context: { request_id: "test", token: token_key }});
+        await session.expire({ context: { request_id: "test", token: token_key } });
 
         const session_data = await session.get(token_key, "user_id");
 

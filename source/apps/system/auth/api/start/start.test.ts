@@ -6,7 +6,7 @@ import session from "../../../../../platform/system/session";
 import { Test_rpc_client } from "../../../../../tests/client";
 import { create_user } from "../../../../../tests/helpers";
 
-const context = { request_id : uuid() };
+const context = { request_id: uuid() };
 
 const global_rpc_client = Test_rpc_client();
 
@@ -26,16 +26,16 @@ beforeAll(async () => {
 afterAll(async () => {
 
     await cache.disconnect();
-    await db.disconnect(context)
+    await db.disconnect(context);
 
 });
 
 describe("API Tests", () => {
 
-    it("Creates a user and starts the application", async() => {
+    it("Creates a user and starts the application", async () => {
 
         const unique = random_hexa_chars();
-        
+
         const fullname = `test_ fullname${unique}`;
 
         const { username, password } = await create_user({ fullname }, { permissions: ["system/auth"] });
@@ -60,10 +60,10 @@ describe("API Tests", () => {
     });
 
 
-    it("Creates a user setting the notification token and check the token is set on the session", async() => {
+    it("Creates a user setting the notification token and check the token is set on the session", async () => {
 
         const unique = random_hexa_chars();
-        
+
         const user_push_notifications_token = `token${unique}`;
 
         const { username, password } = await create_user({}, { permissions: ["system/auth"] });
@@ -72,7 +72,7 @@ describe("API Tests", () => {
 
         const { token } = await rpc_client.login({
             username,
-            password 
+            password
         });
 
         const response = await rpc_client.call(

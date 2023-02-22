@@ -9,6 +9,6 @@ export interface InputSystemAuthUsersList {
   search?: string;
   order_col?: number;
   order_dir?: string;
-  page: number;
+  page?: number;
   size?: number;
 }

@@ -5,7 +5,7 @@ import cache from "../platform/persistence/cache";
 import { uuid } from "../platform/system/utils";
 import { Test_rpc_client } from "../tests/client";
 
-const context = { request_id : uuid() };
+const context = { request_id: uuid() };
 
 const global_rpc_client = Test_rpc_client();
 
@@ -25,13 +25,13 @@ beforeAll(async () => {
 afterAll(async () => {
 
     await cache.disconnect();
-    await db.disconnect(context)
+    await db.disconnect(context);
 
 });
 
 describe("SERVER Tests", () => {
 
-    it("Returns timeout", async() => {
+    it("Returns timeout", async () => {
 
         const old_timeout = config.server.timeout = 1000;
 
@@ -47,7 +47,7 @@ describe("SERVER Tests", () => {
 
     });
 
-    it("Returns validation error", async() => {
+    it("Returns validation error", async () => {
 
         const res = await global_rpc_client.call(
             "system/public",
