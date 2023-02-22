@@ -1,66 +1,60 @@
 name: Zombi CI Actions Development
-
 on:
   push:
     branches:
       - "*"
-      # - "!master"
-
+      - "!master"
 env:
   CI: true
   EXCHANGE_OMS_ID: 1
   ISOLATE: true
-
 jobs:
-  # testing_job:
-  #   environment: local
-  #   # if: ${{ false }}
-  #   runs-on: ubuntu-20.04
-  #   env:
-  #     LOCAL_ENV: ${{ secrets.LOCAL_ENV }}
-  #   services:
-  #     postgres:
-  #       image: postgres:14
-  #       env:
-  #         POSTGRES_PASSWORD: postgres
-  #       ports:
-  #         - 5432:5432
-  #       options: >-
-  #         --health-cmd pg_isready
-  #         --health-interval 10s
-  #         --health-timeout 5s
-  #         --health-retries 5
-  #     redis:
-  #       image: redis:6
-  #       ports:
-  #         - 6379:6379
-  #       options: --entrypoint redis-server
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #       # with:
-  #       #   ref: ${{ github.ref }}
-  #     - name: Use Node.js 18.x
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: 18.x
-  #     - name: Creates the environment file
-  #       run: mkdir .env ; printf "%s" "$LOCAL_ENV" > ".env/local"
-  #     - name: Install dependencies
-  #       run: npm i
-
-  #     - name: "Run DB migrations"
-  #       run: |
-  #         . .env/local
-  #         cd migrations
-  #         sudo -E ./migrations.sh migrate
-  #         cd ..
-  #     # - name: Run tests
-  #     #   run: . .env/local ; npm run test
+  testing_job:
+    environment: local
+    runs-on: ubuntu-20.04
+    env:
+      LOCAL_ENV: ${{ secrets.LOCAL_ENV }}
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:6
+        ports:
+          - 6379:6379
+        options: --entrypoint redis-server
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+      - name: Creates the environment file
+        run: mkdir .env ; printf "%s" "$LOCAL_ENV" > ".env/local"
+      - name: Install dependencies
+        run: npm i
+      - name: "Run DB migrations"
+        run: |
+          . .env/local
+          cd migrations
+          sudo -E ./migrations.sh migrate
+          cd ..
+      # - name: Run tests
+      #   run: . .env/local ; npm run test
   deploy_job:
     environment: development
-    # if: ${{ false }}
-    # needs: testing_job
+    needs: testing_job
     runs-on: ubuntu-20.04
     env:
       DEVELOPMENT_ENV: ${{ secrets.DEVELOPMENT_ENV }}
@@ -78,14 +72,6 @@ jobs:
       - name: Install dependencies
         run: npm i
       - name: "Create SSH key from secret"
-        # run: echo "${{ secrets.BASTION_SSH_KEY }}" | tr -d '\r' > key.pem; chmod 400 key.pem
-        # run: |
-        #   mkdir ~/.ssh
-        #   ssh-keyscan -H ${{ secrets.BASTION_HOST }} >> ~/.ssh/known_hosts
-        #   echo "${{ secrets.BASTION_SSH_KEY }}" > ssh_key
-        #   chmod 600 ./ssh_key
-        #   ssh -i ./ssh_key -fN -v -L 5432:${{ secrets.DB_HOST }}:5432 ec2-user@${{ secrets.BASTION_HOST }}
-        #   rm ./ssh_key
         run: |
           mkdir ~/.ssh
           ssh-keyscan -H ${{ secrets.BASTION_HOST }} >> ~/.ssh/known_hosts
@@ -95,11 +81,6 @@ jobs:
         run: . .env/development ; echo "ZOMBI_DB_URL=${ZOMBI_DB_URL}" ; echo "ZOMBI_DB_URL=${ZOMBI_DB_URL}" >> $GITHUB_ENV
       - name: "Run DB migrations"
         run: . .env/development ; ssh -i ./ssh_key ec2-user@${{ secrets.BASTION_HOST }} -C 'export ZOMBI_DB_URL="${{ env.ZOMBI_DB_URL }}"; rm -rf zombi-backend; git clone https://github.com/${{github.repository}}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate'
-        # run: ssh -i ec2-key-dev.pem ec2-user@ec2-3-91-34-224.compute-1.amazonaws.com -C 'export ZOMBI_DB_URL="${{ secrets.ZOMBI_DB_URL }}"; rm -rf zombi-backend; git clone https://github.com/${{github.repository}}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate'
-        # run: |
-        #   cd migrations
-        #   sudo -E ./migrations.sh migrate
-        #   cd ..
       - name: Deploying code for lambdas
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

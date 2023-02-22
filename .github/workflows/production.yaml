@@ -1,4 +1,4 @@
-name: Zombi CI Actions Production (Deploy)
+name: Zombi CI Actions Production
 on:
   pull_request:
     branches:
