@@ -62,10 +62,6 @@ jobs:
     # if: ${{ false }}
     # needs: testing_job
     runs-on: ubuntu-20.04
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -75,6 +71,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
+      - name: Creates the environment file
+        run: mkdir .env ; printf "%s" "$DEVELOPMENT_ENV" > ".env/development"
       - name: Install dependencies
         run: npm i
       - name: "Create SSH key from secret"
@@ -93,19 +91,11 @@ jobs:
           chmod 600 ./tunnel_key
       - name: "Run DB migrations"
         env:
-          ZOMBI_DB_URL: ${{ secrets.ZOMBI_DB_URL }}
-        run: ssh -v -i ./tunnel_key ec2-user@${{ secrets.BASTION_HOST }} -C 'export ZOMBI_DB_URL="${{ secrets.ZOMBI_DB_URL }}"; rm -rf zombi-backend; git clone https://github.com/${{github.repository}}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate'
+        run: . .env/development ; ssh -v -i ./tunnel_key ec2-user@${{ secrets.BASTION_HOST }} -C 'export ZOMBI_DB_URL="${ZOMBI_DB_URL}"; rm -rf zombi-backend; git clone https://github.com/${{github.repository}}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate'
         # run: ssh -i ec2-key-dev.pem ec2-user@ec2-3-91-34-224.compute-1.amazonaws.com -C 'export ZOMBI_DB_URL="${{ secrets.ZOMBI_DB_URL }}"; rm -rf zombi-backend; git clone https://github.com/${{github.repository}}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate'
         # run: |
         #   cd migrations
         #   sudo -E ./migrations.sh migrate
         #   cd ..
       - name: Deploying code for lambdas
-        env:
-          ZOMBI_CODE_BUCKET: ${{ secrets.ZOMBI_CODE_BUCKET }}
-          ZOMBI_LAMBDA_NAME_MICROSERVER: ${{ secrets.ZOMBI_LAMBDA_NAME_MICROSERVER }}
-          ZOMBI_LAMBDA_NAME_QUEUE: ${{ secrets.ZOMBI_LAMBDA_NAME_QUEUE }}
-          ZOMBI_LAMBDA_NAME_REACTOR: ${{ secrets.ZOMBI_CODE_BUCKET }}
-          ZOMBI_LAMBDA_NAME_WEBSOCKETS: ${{ secrets.ZOMBI_LAMBDA_NAME_WEBSOCKETS }}
-          ZOMBI_LAMBDA_NAME_FILES: ${{ secrets.ZOMBI_LAMBDA_NAME_FILES }}
-        run: bash ./deploy.sh
+        run: . .env/development ; bash ./deploy.sh
