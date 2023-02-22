@@ -92,7 +92,7 @@ jobs:
       - name: "Setting ZOMBI_DB_URL env"
         run: |
           . .env/development
-          env | grep ZOMBI_
+          env
           echo "ZOMBI_DB_URL=${ZOMBI_DB_URL}"
           echo "ZOMBI_DB_URL=${ZOMBI_DB_URL}" >> $GITHUB_ENV
       - name: "Run DB migrations"
