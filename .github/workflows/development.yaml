@@ -90,7 +90,7 @@ jobs:
           echo "${{ secrets.BASTION_SSH_KEY }}" > tunnel_key
           chmod 600 ./tunnel_key
       - name: "Setting ZOMBI_DB_URL env"
-        run: . .env/development && env ; echo "ZOMBI_DB_URL=${ZOMBI_DB_URL}" ; echo "ZOMBI_DB_URL=${ZOMBI_DB_URL}" >> $GITHUB_ENV
+        run: echo "ZOMBI_DB_URL=`. .env/development ; echo ${ZOMBI_DB_URL}`" ; echo "ZOMBI_DB_URL=${ZOMBI_DB_URL}" >> $GITHUB_ENV
       - name: "Run DB migrations"
         run: . .env/development ; ssh -v -i ./tunnel_key ec2-user@${{ secrets.BASTION_HOST }} -C 'export ZOMBI_DB_URL="${{ env.ZOMBI_DB_URL }}"; rm -rf zombi-backend; git clone https://github.com/${{github.repository}}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate'
         # run: ssh -i ec2-key-dev.pem ec2-user@ec2-3-91-34-224.compute-1.amazonaws.com -C 'export ZOMBI_DB_URL="${{ secrets.ZOMBI_DB_URL }}"; rm -rf zombi-backend; git clone https://github.com/${{github.repository}}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate'
