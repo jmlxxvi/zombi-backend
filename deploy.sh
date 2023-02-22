@@ -10,7 +10,6 @@ else
     LAMBDA_TO_UPLOAD=$1
 fi
 
-# CODE_FILE=${DATETIME}_${LAMBDA_NAME}.zip
 CODE_FILE=${DATETIME}_ZOMBI_LAMBDA_CODE.zip
 
 echo "Code file is ${CODE_FILE}"
