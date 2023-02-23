@@ -8,7 +8,8 @@ import { readFileSync } from "node:fs";
 
 function encrypt(key: string, secret: string) {
     const binkey = sodium.from_base64(key, sodium.base64_variants.ORIGINAL)
-    const binsec = sodium.from_string(secret)
+    // const binsec = sodium.from_string(secret)
+    const binsec = sodium.from_base64(secret)
     const encBytes = sodium.crypto_box_seal(binsec, binkey)
     const output = sodium.to_base64(encBytes, sodium.base64_variants.ORIGINAL)
 
@@ -44,9 +45,14 @@ sodium.ready.then(async () => {
     await octokit.request('PUT /repos/{owner}/{repo}/environments/{environment_name}', { environment_name: 'local', owner, repo, headers });
     await octokit.request('PUT /repos/{owner}/{repo}/environments/{environment_name}', { environment_name: config.context, owner, repo, headers });
 
-    const f = readFileSync(envVarsLocalFile, { encoding: "utf-8" });
+    const f = readFileSync(envVarsLocalFile, { encoding: "base64" });
     console.log(f);
     const r = encrypt(key, f);
+
+    console.log("--------------------------------------");
+
+
+
 
     console.log(r);
 
@@ -60,6 +66,7 @@ sodium.ready.then(async () => {
         headers
     });
 
+    return true;
     await octokit.request('PUT /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}', {
         repository_id,
         environment_name: config.context,
