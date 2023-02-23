@@ -11,20 +11,22 @@ const envVarsDir = join(__dirname, "../../.env");
 const envVarsLocalFile = `${envVarsDir}/local`;
 const envVarsContextFile = `${envVarsDir}/${config.context}`;
 
-function encrypt(key: string, secret: string) {
-    const binkey = sodium.from_base64(key, sodium.base64_variants.ORIGINAL)
-    const binsec = sodium.from_string(secret)
-    // const binsec = sodium.from_base64(secret)
-    // const binsec = Buffer.from(readFileSync(envVarsLocalFile))
-    const encBytes = sodium.crypto_box_seal(binsec, binkey)
-    const output = sodium.to_base64(encBytes, sodium.base64_variants.ORIGINAL)
 
-    console.log(output);
-
-    return output;
-}
 
 sodium.ready.then(async () => {
+
+    function encrypt(key: string, secret: string) {
+        const binkey = sodium.from_base64(key, sodium.base64_variants.ORIGINAL)
+        const binsec = sodium.from_string(secret)
+        // const binsec = sodium.from_base64(secret)
+        // const binsec = Buffer.from(readFileSync(envVarsLocalFile))
+        const encBytes = sodium.crypto_box_seal(binsec, binkey)
+        const output = sodium.to_base64(encBytes, sodium.base64_variants.ORIGINAL)
+
+        console.log(output);
+
+        return output;
+    }
 
     // https://docs.github.com/en/rest/overview/endpoints-available-for-github-apps?apiVersion=2022-11-28
 
