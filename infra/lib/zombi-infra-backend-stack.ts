@@ -36,6 +36,12 @@ export class ZombiInfraBackendStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
+    // ------
+    // Region
+    // ------
+
+    new CfnOutput(this, 'defaultRegion', { value: Stack.of(this).region });
+
     // --------------
     // S3 Code Bucket
     // --------------
