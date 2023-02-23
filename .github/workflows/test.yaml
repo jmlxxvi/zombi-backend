@@ -1,23 +1,15 @@
-name: Zombi CI Actions Development
+name: Testing Secrets via API
 on:
   push:
     branches:
       - "*"
-env:
-  CI: true
-  EXCHANGE_OMS_ID: 1
-  ISOLATE: true
 jobs:
   testing_job:
     environment: local
     runs-on: ubuntu-20.04
     env:
-      LOCAL_ENV: ${{ secrets.LOCAL_ENV }}
-      SECX: ${{ secrets.SECX }}
+      SECX: ${{ secrets.MYSECRET }}
     steps:
       - name: Test Env Vars
         run: |
-          echo "$LOCAL_ENV"
-          echo "$SECX"
-          echo "->${SECX}"
-          echo "$XXXXXXX"
+          echo "HERE -> ${MYSECRET}"
