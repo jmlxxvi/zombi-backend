@@ -45,6 +45,7 @@ sodium.ready.then(async () => {
     const f = readFileSync(envVarsLocalFile).toString();
     console.log(f);
     const r = encrypt(key, f);
+
     console.log(r);
 
     await octokit.request('PUT /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}', {
