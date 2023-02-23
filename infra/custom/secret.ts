@@ -12,7 +12,9 @@ function encrypt(key: string, secret: string) {
     return output;
 }
 
-sodium.ready.then(async () => {
+(async function () {
+
+    await sodium.ready;
 
     const owner = process.env.GITHUB_OWNER || "pin";
     const repo = process.env.GITHUB_REPO || "pon";
@@ -26,10 +28,7 @@ sodium.ready.then(async () => {
 
     const { key, key_id } = (await octokit.request('GET /repos/{owner}/{repo}/actions/secrets/public-key', { owner, repo, headers }))?.data;
 
-    console.log(key, key_id);
-
-    console.log(`Public Key is ${key}`);
-    console.log(`Public Key ID is ${key_id}`);
+    console.log(`Public Key: ${key}  ID: ${key_id}`);
 
     // await octokit.request('PUT /repos/{owner}/{repo}/environments/{environment_name}', { environment_name: 'local', owner, repo, headers });
 
@@ -42,6 +41,7 @@ sodium.ready.then(async () => {
         headers
     });
 
-    console.log(response);
-});
+    console.log(`Response status: ${response.status}`);
+
+})();
 
