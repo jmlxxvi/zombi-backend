@@ -20,3 +20,4 @@ jobs:
           echo "$LOCAL_ENV"
           echo "$SECX"
           echo "->${SECX}"
+          echo "$XXXXXXX"
