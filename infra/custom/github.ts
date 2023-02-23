@@ -6,10 +6,16 @@ import * as sodium from "libsodium-wrappers";
 import config from "../config";
 import { readFileSync } from "node:fs";
 
+
+const envVarsDir = join(__dirname, "../../.env");
+const envVarsLocalFile = `${envVarsDir}/local`;
+const envVarsContextFile = `${envVarsDir}/${config.context}`;
+
 function encrypt(key: string, secret: string) {
     const binkey = sodium.from_base64(key, sodium.base64_variants.ORIGINAL)
     // const binsec = sodium.from_string(secret)
-    const binsec = sodium.from_base64(secret)
+    // const binsec = sodium.from_base64(secret)
+    const binsec = Buffer.from(readFileSync(envVarsLocalFile))
     const encBytes = sodium.crypto_box_seal(binsec, binkey)
     const output = sodium.to_base64(encBytes, sodium.base64_variants.ORIGINAL)
 
@@ -28,9 +34,6 @@ sodium.ready.then(async () => {
 
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
-    const envVarsDir = join(__dirname, "../../.env");
-    const envVarsLocalFile = `${envVarsDir}/local`;
-    const envVarsContextFile = `${envVarsDir}/${config.context}`;
 
     const repository_id = (await octokit.request("GET /repos/{owner}/{repo}", { owner, repo }))?.data?.id;
 
