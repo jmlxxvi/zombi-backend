@@ -1,12 +1,4 @@
-// import { yes_or_not } from "../../platform/system/utils";
-
-type AppsSystemConfig = {
-    basedir: string,
-    database: {
-        name: string,
-        schema: string
-    }
-}
+import type { AppsSystemConfig } from "./types";
 
 const config: AppsSystemConfig = {
     basedir: __dirname,

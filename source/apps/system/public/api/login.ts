@@ -26,8 +26,6 @@ WARNING - 警告 - ADVERTENCIA - AVERTISSEMENT - WARNUNG - AVVERTIMENTO - 警告
  * 
  * It is important for the client to save the token returned and use it to authenticate on subsequent requests.
  * 
- * Learn More {@tutorial login}
- * 
  * @param args 
  * @param args.username 
  * @param args.password 
@@ -54,59 +52,59 @@ export const login = async (args: InputSystemPublicLogin, context: ZombiExecuteC
         const { username, password, language = config.i18n.default_language, push_notifications_token = "none" } = args;
 
         if (!language_exists(language)) {
-    
+
             return {
                 error: true,
                 code: 1005,
                 message: `Invalid language: ${language}`,
                 data: null
             };
-    
+
         } else {
-    
+
             const user_data = await db_user_data({
                 field: "lower(username)",
                 value: username.toLowerCase()
             });
-        
+
             if (user_data !== null) {
 
                 const { id: user_id, email, password: hashpass, fullname } = user_data;
                 const timezone = (user_data?.timezone) ? user_data.timezone : config.i18n.default_timezone;
                 const country = (user_data?.country) ? user_data.country : config.i18n.default_country;
-        
+
                 const password_match = await security.password_compare(password, hashpass);
-        
+
                 if (password_match) {
-        
+
                     const token = session.token();
-        
+
                     await session.create({ token, data: { user_id, language, timezone, fullname, email, country }, push_notifications_token, context });
-        
-                    return { error: false, code: 1000, data: { fullname, email, token, timezone, i18n: get_lang_data(language) }};
-        
+
+                    return { error: false, code: 1000, data: { fullname, email, token, timezone, i18n: get_lang_data(language) } };
+
                 } else {
-        
+
                     log.debug(`User [${username}] cannot login`, "system/public:login", context);
-        
+
                     return { error: true, code: 1004, message: codes.message(1004), data: null };
-        
+
                 }
-        
+
             } else {
-        
+
                 log.debug(`User [${username}] not found`, "system/public:login", context);
-        
+
                 return { error: true, code: 1004, message: codes.message(1004), data: null };
-        
+
             }
-    
+
         }
 
     } else {
 
         log.error("Invalid input schema", "system/public:login", context);
-        
+
         return { error: true, code: 1040, message: codes.message(1040), data: null };
 
     }

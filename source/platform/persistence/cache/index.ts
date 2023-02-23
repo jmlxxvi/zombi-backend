@@ -21,34 +21,32 @@ let connected = false;
 
 /**
  * Connects to the Redis server defined in configuration
- * Check source/platform/config
- * @param {ZombiExecuteContextData} context - The transaction request ID
- * @returns Promise{void|string} - On error returs the error message
+ * Check source/platform/config.ts
  */
 const connect = async (context: ZombiExecuteContextData): Promise<void> => {
 
-    if(!connected) {
+    if (!connected) {
 
         redis.on("error", async (error) => {
             connected = false;
             log.error("Redis error: " + error, "cache/connect", context);
         });
-    
+
         redis.on("connect", async () => {
             connected = true;
             log.info("Connected to Redis server at " + url_parts.hostname + ":" + url_parts.port, "cache/connect", context);
         });
-    
+
         try {
-    
+
             return redis.connect();
-            
+
         } catch (error) {
-    
+
             connected = false;
-    
+
             log.error(error, "cache/connect");
-            
+
         }
 
     }
@@ -58,7 +56,6 @@ const connect = async (context: ZombiExecuteContextData): Promise<void> => {
 /**
  * Executes the redis function passed as the first parameter of the array
  * The remaining array elements are passes as arguments to the Redis function
- * @param args - The generic arguments to call redis functions
  */
 const generic = async (...args: any[]): Promise<any> => {
 
@@ -67,17 +64,17 @@ const generic = async (...args: any[]): Promise<any> => {
     if (connected) {
         try {
 
-            return (redis as any)[operation](...args); 
-            
+            return (redis as any)[operation](...args);
+
         } catch (error) {
 
             log.error(error, "cache/generic");
 
             return false;
-            
+
         }
-        
-    } else { 
+
+    } else {
         log.error(`Calling cache function (generic: ${operation}(${JSON.stringify(args)})) when the client is closed`, "cache/connect");
 
         return false;
@@ -97,7 +94,7 @@ const keys = async (pattern: string): Promise<string[]> => {
             COUNT: config.cache.fetch_size
         })) { keys.push(scan_key); }
         return keys;
-    } else { 
+    } else {
         log.error("Calling cache function (keys) when the client is closed", "cache/connect");
         return [];
     }
@@ -114,7 +111,7 @@ const set = (key: string, value: string, ttl = 0): Promise<string | null> => {
         return redis.set(key, value, {
             EX: ttl
         });
-    } else { 
+    } else {
         log.error("Calling cache function (set) when the client is closed", "cache/connect");
         return Promise.resolve(null);
     }
@@ -122,13 +119,11 @@ const set = (key: string, value: string, ttl = 0): Promise<string | null> => {
 
 /**
  * Gets the value of a Redis key
- * @param {string} key - The Redis key to get
- * @return Promise{Object} of the parsed JSON value or null
  */
 const get = (key: string): Promise<string | null> => {
     if (connected) {
         return redis.get(key);
-    } else { 
+    } else {
         log.error("Calling cache function (get) when the client is closed", "cache/connect");
         return Promise.resolve(null);
     }
@@ -136,12 +131,11 @@ const get = (key: string): Promise<string | null> => {
 
 /**
  * Deletes a Redis key
- * @param key - The Redis key to delete
  */
 const del = (key: string): Promise<number> => {
     if (connected) {
         return redis.del(key);
-    } else { 
+    } else {
         log.error("Calling cache function (del) when the client is closed", "cache/connect");
         return Promise.resolve(0);
     }
@@ -149,13 +143,11 @@ const del = (key: string): Promise<number> => {
 
 /**
  * Checks if the given Redis key exists
- * @param key - The Redis key to check
- * @return Promise(true) is the key exists
  */
 const exists = (key: string): Promise<number> => {
     if (connected) {
         return redis.exists(key);
-    } else { 
+    } else {
         log.error("Calling cache function (exists) when the client is closed", "cache/connect");
         return Promise.resolve(-1);
     }
@@ -171,9 +163,9 @@ const is_connected = () => connected;
  */
 const disconnect = async () => {
     if (connected) {
-        connected = false; 
-        await redis.disconnect(); 
-    } 
+        connected = false;
+        await redis.disconnect();
+    }
     log.info("Disconnected from cache", "cache/disconnect");
 };
 
@@ -183,7 +175,6 @@ const disconnect = async () => {
  * @param key - The Redis key to save the results of the function
  * @param fn - The function to execute
  * @param ttl - The TTL of the created key
- * @return The cached value or the function return value
  */
 const fun = async (key: string, fn: () => Promise<any>, ttl = 0) => {
     if (connected) {
@@ -195,7 +186,7 @@ const fun = async (key: string, fn: () => Promise<any>, ttl = 0) => {
             await set(key, value, ttl);
             return value;
         }
-    } else { 
+    } else {
         log.error("Calling cache function (fun) when the client is closed", "cache/connect");
         return false;
     }

@@ -2,18 +2,7 @@
 
 import base_config from "../../platform/config";
 
-type AppsSystemConfig = {
-    basedir: string,
-    database: {
-        name: string,
-        schema: string
-    },
-    cache: {
-        keys: {
-            [key: string]: string
-        }
-    }
-}
+import type { AppsSystemConfig } from "./types";
 
 const config: AppsSystemConfig = {
     basedir: __dirname,

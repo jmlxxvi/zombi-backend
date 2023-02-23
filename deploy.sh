@@ -1,4 +1,4 @@
-[ -z "${ZOMBI_LAMBDA_NAME_MICROSERVER}" ] && echo "Zombi environment not set!" && exit 2
+[ -z "${ZOMBI_LAMBDA_NAME_MICROSERVER}" ] && echo "Environment not set!" && exit 2
 
 export AWS_PAGER=""
 

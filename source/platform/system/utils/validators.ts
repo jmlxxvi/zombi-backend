@@ -6,10 +6,7 @@ addFormats(ajv);
 
 import validator from "validator";
 
-type ValidationResults = {
-    valid: boolean,
-    message: string
-}
+import type { ValidationResults } from "./types";
 
 export const validate_schema = <T>(schema: Record<string, unknown>, data: T): ValidationResults => {
 

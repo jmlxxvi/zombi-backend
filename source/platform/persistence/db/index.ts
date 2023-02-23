@@ -41,7 +41,7 @@ const get_db_type = (db_name: string) => {
 
 /**
  * Connects to the database defined on config
- * See source/core/config
+ * See source/platform/config
  * @param context - The transaction request ID
  * @return Promise[void]
  */
@@ -72,9 +72,9 @@ const connect = async (context: ZombiExecuteContextData) => {
 
 /**
  * Diconnects from the database defined on config
- * See source/core/config
+ * See: source/platform/config
  * @param request_id - The transaction request ID
- * @return Promise{void}
+ * @return Promise<void>
  */
 const disconnect = async (context: ZombiExecuteContextData) => {
 

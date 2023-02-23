@@ -20,7 +20,7 @@
 		"deps:apps": "npx madge --image docs/deps/app.svg --exclude '(log/index|platform/config/index|platform/system/utils/index)\\.js$' build/apps",
 		"docs:web": "npx typedoc --plugin none",
 		"docs:md": "npx typedoc",
-		"docs:deploy": "npm docs:build:web;. ./.env/development; aws s3 cp ./docs/typedoc s3://${AWS_CONFIG_DOCS_BUCKET_NAME} --recursive; echo '\n\n\nDOCS deployed to https://'${AWS_CONFIG_DOCS_BUCKET_NAME}'.s3.'${AWS_DEFAULT_REGION}'.amazonaws.com/index.html'",
+		"docs:deploy": "npm docs:build:web;. ./.env/development; aws s3 cp ./docs/typedoc s3://${ZOMBI_DOCS_BUCKET} --recursive; echo '\n\n\nDOCS deployed to https://'${ZOMBI_DOCS_BUCKET}'.s3.'${AWS_DEFAULT_REGION}'.amazonaws.com/index.html'",
 		"infra": "cd docker && docker-compose up -d",
 		"lambda:deploy": "bash ./deploy.sh",
 		"lint": "npx eslint --quiet './source/**/*.ts'",
