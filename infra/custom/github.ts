@@ -17,9 +17,11 @@ function encrypt(key: string, secret: string) {
     // const binsec = sodium.from_base64(secret)
     // const binsec = Buffer.from(readFileSync(envVarsLocalFile))
     const encBytes = sodium.crypto_box_seal(binsec, binkey)
-    const output = sodium.to_base64(encBytes, sodium.base64_variants.URLSAFE)
+    const output = sodium.to_base64(encBytes, sodium.base64_variants.ORIGINAL)
 
-    return output
+    console.log(output);
+
+    return output;
 }
 
 sodium.ready.then(async () => {
