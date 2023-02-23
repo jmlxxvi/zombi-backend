@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - "*"
-      - "!master"
+      # - "!master"
 env:
   CI: true
   EXCHANGE_OMS_ID: 1
