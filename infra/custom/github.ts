@@ -37,12 +37,14 @@ sodium.ready.then(async () => {
 
     const { key, key_id } = (await octokit.request('GET /repos/{owner}/{repo}/actions/secrets/public-key', { owner, repo, headers }))?.data;
 
+    console.log(key, key_id);
+
     console.log(`Public Key is ${key}`);
 
     await octokit.request('PUT /repos/{owner}/{repo}/environments/{environment_name}', { environment_name: 'local', owner, repo, headers });
     await octokit.request('PUT /repos/{owner}/{repo}/environments/{environment_name}', { environment_name: config.context, owner, repo, headers });
 
-    const f = readFileSync(envVarsLocalFile).toString();
+    const f = readFileSync(envVarsLocalFile, { encoding: "utf-8" });
     console.log(f);
     const r = encrypt(key, f);
 
