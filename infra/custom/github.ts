@@ -48,7 +48,7 @@ sodium.ready.then(async () => {
     await octokit.request('PUT /repos/{owner}/{repo}/environments/{environment_name}', { environment_name: 'local', owner, repo, headers });
     await octokit.request('PUT /repos/{owner}/{repo}/environments/{environment_name}', { environment_name: config.context, owner, repo, headers });
 
-    const f = readFileSync(envVarsLocalFile, { encoding: "base64" });
+    const f = readFileSync(envVarsLocalFile, { encoding: "utf8" });
     console.log(f);
     const r = encrypt(key, f);
 
@@ -59,7 +59,7 @@ sodium.ready.then(async () => {
 
     console.log(r);
 
-    await octokit.request('PUT /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}', {
+    const x = await octokit.request('PUT /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}', {
         repository_id,
         environment_name: 'local',
         secret_name: 'SECX',
@@ -67,6 +67,8 @@ sodium.ready.then(async () => {
         key_id,
         headers
     });
+
+    console.log(x);
 
     return true;
 
