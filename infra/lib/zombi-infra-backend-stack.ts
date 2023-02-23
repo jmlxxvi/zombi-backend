@@ -1,8 +1,5 @@
 import config, { serverConfig, queueConfig, reactorConfig, websocketsConfig, filesConfig } from "../config";
 
-// import path = require("node:path");
-// import crypto from "node:crypto";
-
 import { Duration, Stack, StackProps, Tag, Aspects, CfnOutput, RemovalPolicy, SecretValue } from 'aws-cdk-lib';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import * as events from "aws-cdk-lib/aws-events";
@@ -27,11 +24,6 @@ function tagSubnets(subnets: ec2.ISubnet[], tagName: string, tagValue: string) {
     Aspects.of(subnet).add(new Tag(tagName, tagExtended));
   }
 }
-
-if (!process.env.APP_ID) {
-  throw new Error("Environment not set. See .env file");
-}
-
 export class ZombiInfraBackendStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
@@ -41,6 +33,8 @@ export class ZombiInfraBackendStack extends Stack {
     // ------
 
     new CfnOutput(this, 'defaultRegion', { value: Stack.of(this).region });
+
+
 
     // --------------
     // S3 Code Bucket
@@ -195,7 +189,6 @@ export class ZombiInfraBackendStack extends Stack {
       preferredMaintenanceWindow: "fri:00:30-fri:01:30",
     });
 
-    // redisCache.addDependsOn(redisSubnetGroup);
     redisCache.addDependency(redisSubnetGroup);
 
     const cacheUrl = `redis://${redisCache.attrRedisEndpointAddress}:${config.redis.port}`;
@@ -224,7 +217,6 @@ export class ZombiInfraBackendStack extends Stack {
       timeout: Duration.seconds(config.lambdas.server.timeout),
       handler: config.lambdas.server.handler,
       code: lambda.Code.fromInline(config.lambdas.settings.inlineCode),
-      // code: lambda.Code.fromBucket(new s3.Bucket(), "2023_02_17.02_01_36_lambda-websockets-dev.zip"),
       environment: {
         ...serverConfig,
         ZOMBI_DB_URL: dbUrl,

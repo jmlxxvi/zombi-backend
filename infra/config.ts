@@ -1,14 +1,26 @@
+import { randomBytes } from "node:crypto";
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 
-const appId = process.env.APP_ID || "zombi";
-const context = process.env.APP_CONTEXT || "dev";
+// Only letters and numbers for appIn. Should start with letter. No spaces or symbols.
+const appId = process.env.APP_ID || "myapp";
+const context = process.env.APP_CONTEXT || "development"; // Should be "development" or "production"
 
 function prefix(name: string): string {
     return `${appId}-${context}-${name}`
 }
 
+function passwordGenerator(size = 32) {
+    return randomBytes(size).toString("hex");
+}
+
+const dbPassword = passwordGenerator();
+const reactorToken = passwordGenerator();
+
 const config = {
     context,
+    envs: {
+        name: prefix("env-vars"),
+    },
     s3: {
         code: {
             name: prefix("code-bucket"),
@@ -21,8 +33,7 @@ const config = {
         name: prefix("vpc"),
     },
     key: {
-        name: process.env.KEYPAIR_NAME!,
-        file: `${process.env.KEYPAIR_NAME!}.pem`,
+        name: prefix("key")
     },
     ec2: {
         bastion: {
@@ -35,10 +46,10 @@ const config = {
     },
     rds: {
         name: prefix("db"),
-        username: "zombi",
-        password: process.env.DB_PASSWORD!,
+        username: appId,
+        password: dbPassword,
         port: 5432,
-        database: "zombi",
+        database: appId,
     },
     lambdas: {
         settings: {
@@ -69,7 +80,7 @@ const config = {
             memorySize: 1024,
             timeout: 30,
             handler: "server/lambda/reactor.handler",
-            token: process.env.REACTOR_TOKEN!,
+            token: reactorToken,
         },
         websockets: {
             name: prefix("websockets-lambda"),
@@ -122,7 +133,7 @@ export const queueConfig = {
 
 export const reactorConfig = {
     ...baseConfig,
-    ZOMBI_AUTH_REACTOR_TOKEN: process.env.REACTOR_TOKEN!,
+    ZOMBI_AUTH_REACTOR_TOKEN: reactorToken,
     ZOMBI_AUTH_REACTOR_ENABLED: "yes"
 }
 

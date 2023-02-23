@@ -142,3 +142,4 @@ docs/typedoc
 **/target/release/
 **/target/debug/
 
+keys/

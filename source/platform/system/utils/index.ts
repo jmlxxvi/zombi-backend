@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import crypto from "node:crypto";
 
 export const timestamp = (ms = false): number => { return ms ? Date.now() : Math.floor(Date.now() / 1000); };
 
@@ -31,7 +31,15 @@ export const date_format = (date: any, format: string, use_utc = false): string 
     });
 };
 
-export const random_hexa_chars = (size = 8) => crypto.randomBytes(size).toString("hex").toUpperCase();
+export const random_hexa_chars = (size = 8, upper_case = true) => {
+    const chars = crypto.randomBytes(size).toString("hex");
+
+    if (upper_case) {
+        return chars.toUpperCase();
+    } else {
+        return chars;
+    }
+};
 
 export const yes_or_not = (thing: string | undefined): boolean => (thing?.toUpperCase() === "YES" || thing?.toUpperCase() === "Y" || thing?.toUpperCase() === "TRUE");
 

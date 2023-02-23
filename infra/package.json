@@ -6,6 +6,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "deploy": "npx ts-node ./custom/deploy.ts",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk"
