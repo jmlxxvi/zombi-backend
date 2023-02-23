@@ -48,7 +48,10 @@ jobs:
           name: art
           path: |
             .env/local
-      - run: env
+      - name: "SECX"
+        env:
+          SECX: ${{ secrets.SECX }}
+        run: echo ${SECX}
       - name: Install dependencies
         run: npm i
       - name: "Run DB migrations"

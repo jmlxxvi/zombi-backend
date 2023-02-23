@@ -13,9 +13,9 @@ const envVarsContextFile = `${envVarsDir}/${config.context}`;
 
 function encrypt(key: string, secret: string) {
     const binkey = sodium.from_base64(key, sodium.base64_variants.ORIGINAL)
-    // const binsec = sodium.from_string(secret)
+    const binsec = sodium.from_string(secret)
     // const binsec = sodium.from_base64(secret)
-    const binsec = Buffer.from(readFileSync(envVarsLocalFile))
+    // const binsec = Buffer.from(readFileSync(envVarsLocalFile))
     const encBytes = sodium.crypto_box_seal(binsec, binkey)
     const output = sodium.to_base64(encBytes, sodium.base64_variants.ORIGINAL)
 
@@ -62,6 +62,17 @@ sodium.ready.then(async () => {
     await octokit.request('PUT /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}', {
         repository_id,
         environment_name: 'local',
+        secret_name: 'SECX',
+        encrypted_value: encrypt(key, "JIJIJIJ"),
+        key_id,
+        headers
+    });
+
+    return true;
+
+    await octokit.request('PUT /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}', {
+        repository_id,
+        environment_name: 'local',
         secret_name: 'LOCAL_ENV',
         // encrypted_value: encrypt(key, readFileSync(envVarsLocalFile).toString()),
         encrypted_value: r,
@@ -69,7 +80,6 @@ sodium.ready.then(async () => {
         headers
     });
 
-    return true;
     await octokit.request('PUT /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}', {
         repository_id,
         environment_name: config.context,
