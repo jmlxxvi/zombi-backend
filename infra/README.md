@@ -21,3 +21,10 @@ npx cdk bootstrap
 # zombi-infra
 
 To use this on different environments see: https://docs.aws.amazon.com/cdk/v2/guide/environments.html
+
+Create and .env file on the directory this README file is and then set the following variables:
+APP_ID: The name of the application or company
+APP_CONTEXT: The context, either "development" or "production"
+GITHUB_TOKEN: The token with access to GitHib Rest API
+GITHUB_OWNER: The owner of the repository
+GITHUB_REPO: The repository name

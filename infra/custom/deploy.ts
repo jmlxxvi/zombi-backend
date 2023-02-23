@@ -8,8 +8,6 @@ import config from "../config";
 (async function () {
     const CDKOUT = join(__dirname, "../cdk.out");
 
-    // execSync('npx cdk list', { stdio: 'inherit' });
-
     const OutputFile = `${CDKOUT}/deploy-outputs.json`
 
     const keyFilesDir = join(__dirname, "../../keys");
@@ -25,25 +23,25 @@ import config from "../config";
 
     let ok = true;
 
-    // try {
-    //     execSync(`aws ec2 create-key-pair --key-name ${keyPairName} --query 'KeyMaterial' --output text >> ${keyPairFile}`, { stdio: 'inherit' });
-    // } catch (error: any) {
-    //     if (error.status === 254) { // 254 means the keypair already exists.
-    //         console.log("KeyPair file already exists");
-    //     } else {
-    //         ok = false;
-    //         console.log(error);
-    //     }
-    // }
+    try {
+        execSync(`aws ec2 create-key-pair --key-name ${keyPairName} --query 'KeyMaterial' --output text >> ${keyPairFile}`, { stdio: 'inherit' });
+    } catch (error: any) {
+        if (error.status === 254) { // 254 means the keypair already exists.
+            console.log("KeyPair file already exists");
+        } else {
+            ok = false;
+            console.log(error);
+        }
+    }
 
-    // if (ok) {
-    //     try {
-    //         execSync(`npx cdk deploy --require-approval never --outputs-file ${OutputFile}`, { stdio: 'inherit' });
-    //     } catch (error) {
-    //         ok = false;
-    //         console.log(error);
-    //     }
-    // }
+    if (ok) {
+        try {
+            execSync(`npx cdk deploy --require-approval never --outputs-file ${OutputFile}`, { stdio: 'inherit' });
+        } catch (error) {
+            ok = false;
+            console.log(error);
+        }
+    }
 
     if (ok) {
         console.log("Creating env vars file...");
