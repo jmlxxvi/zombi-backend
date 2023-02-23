@@ -42,6 +42,11 @@ jobs:
           node-version: 18.x
       - name: Creates the environment file
         run: mkdir .env ; printf "%s" "$LOCAL_ENV" > ".env/local"
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-without-markdown
+          path: .env/local
       - name: Install dependencies
         run: npm i
       - name: "Run DB migrations"
