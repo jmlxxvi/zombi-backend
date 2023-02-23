@@ -17,7 +17,7 @@ function encrypt(key: string, secret: string) {
     // const binsec = sodium.from_base64(secret)
     // const binsec = Buffer.from(readFileSync(envVarsLocalFile))
     const encBytes = sodium.crypto_box_seal(binsec, binkey)
-    const output = sodium.to_base64(encBytes, sodium.base64_variants.ORIGINAL)
+    const output = sodium.to_base64(encBytes, sodium.base64_variants.URLSAFE)
 
     return output
 }
@@ -44,12 +44,13 @@ sodium.ready.then(async () => {
     console.log(key, key_id);
 
     console.log(`Public Key is ${key}`);
+    console.log(`Public Key ID is ${key_id}`);
 
     await octokit.request('PUT /repos/{owner}/{repo}/environments/{environment_name}', { environment_name: 'local', owner, repo, headers });
     await octokit.request('PUT /repos/{owner}/{repo}/environments/{environment_name}', { environment_name: config.context, owner, repo, headers });
 
     const f = readFileSync(envVarsLocalFile, { encoding: "utf8" });
-    console.log(f);
+    // console.log(f);
     const r = encrypt(key, f);
 
     console.log("--------------------------------------");
@@ -57,7 +58,9 @@ sodium.ready.then(async () => {
 
 
 
-    console.log(r);
+    // console.log(r);
+
+    // https://docs.github.com/en/rest/actions/secrets?apiVersion=2022-11-28#create-or-update-an-environment-secret
 
     const x = await octokit.request('PUT /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}', {
         repository_id,
