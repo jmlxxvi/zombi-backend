@@ -8,7 +8,7 @@ jobs:
     environment: local
     runs-on: ubuntu-20.04
     env:
-      SECX: ${{ secrets.MYSECRET }}
+      MYSECRET: ${{ secrets.MYSECRET }}
     steps:
       - name: Test Env Vars
         run: |
