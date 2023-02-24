@@ -79,11 +79,11 @@ jobs:
         run: mkdir .env ; printf "%s" "$DEVELOPMENT_ENV" > ".env/development"
       - name: Install dependencies
         run: npm i
-      - name: "Setting $GITHUB_ENV"
-        run: |
-          . .env/development ; echo "ZOMBI_DB_URL=${ZOMBI_DB_URL}" >> $GITHUB_ENV
-          . .env/development ; echo "BASTION_HOST=${BASTION_HOST}" >> $GITHUB_ENV
-          . .env/development ; echo "BASTION_SSH_KEY=${BASTION_SSH_KEY}" >> $GITHUB_ENV
+      # - name: "Setting $GITHUB_ENV"
+      #   run: |
+      #     . .env/development ; echo "ZOMBI_DB_URL=${ZOMBI_DB_URL}" >> $GITHUB_ENV
+      #     . .env/development ; echo "BASTION_HOST=${BASTION_HOST}" >> $GITHUB_ENV
+      #     . .env/development ; echo "BASTION_SSH_KEY=${BASTION_SSH_KEY}" >> $GITHUB_ENV
       - name: "Create SSH key from secret"
         run: |
           . .env/development
