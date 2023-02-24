@@ -48,10 +48,6 @@ jobs:
           name: art
           path: |
             .env/local
-      - name: "SECX"
-        env:
-          SECX: ${{ secrets.SECX }}
-        run: echo "->${SECX}"
       - name: Install dependencies
         run: npm i
       - name: "Run DB migrations"
@@ -90,9 +86,10 @@ jobs:
           . .env/development ; echo "BASTION_SSH_KEY=${BASTION_SSH_KEY}" >> $GITHUB_ENV
       - name: "Create SSH key from secret"
         run: |
+          . .env/development
           mkdir ~/.ssh
-          ssh-keyscan -H ${{ env.BASTION_HOST }} >> ~/.ssh/known_hosts
-          echo "${{ env.BASTION_SSH_KEY }}" > ssh_key
+          ssh-keyscan -H ${BASTION_HOST} >> ~/.ssh/known_hosts
+          echo "${BASTION_SSH_KEY}" > ssh_key
           chmod 600 ./ssh_key
 
       - name: "Run DB migrations"
