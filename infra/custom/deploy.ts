@@ -58,6 +58,7 @@ import config from "../config";
         evc += `export ZOMBI_LAMBDA_NAME_QUEUE="${out.lambdaQueueFunctionName}"\n`;
         evc += `export ZOMBI_LAMBDA_NAME_REACTOR="${out.lambdaReactorFunctionName}"\n`;
         evc += `export ZOMBI_LAMBDA_NAME_WEBSOCKETS="${out.lambdaWebsocketsFunctionName}"\n`;
+        evc += `export ZOMBI_LAMBDA_URL_WEBSOCKETS="${out.lambdaWebsocketsFunctionApiEndpoint}"\n`;
         evc += `export ZOMBI_LAMBDA_NAME_FILES="${out.lambdaFilesFunctionName}"\n`;
         evc += `export ZOMBI_CODE_BUCKET="${out.CodeBucketName}"\n`;
         evc += `export ZOMBI_DOCS_BUCKET="${out.DocsBucketName}"\n`;

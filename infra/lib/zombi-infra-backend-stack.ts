@@ -506,7 +506,7 @@ export class ZombiInfraBackendStack extends Stack {
     );
 
     new CfnOutput(this, "lambdaWebsocketsFunctionName", { value: config.lambdas.websockets.name });
-    new CfnOutput(this, "lambdaWebsocketsFunctionApiEndpoint", { value: lambdaWebsocketsFunctionApi.attrApiEndpoint });
+    new CfnOutput(this, "lambdaWebsocketsFunctionApiEndpoint", { value: `${lambdaWebsocketsFunctionApi.attrApiEndpoint}/${config.context}` });
 
     // Files Lambda
 
