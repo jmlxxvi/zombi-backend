@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - "*"
-      - "!master"
+      # - "!master"
 env:
   CI: true
   EXCHANGE_OMS_ID: 1
@@ -81,6 +81,7 @@ jobs:
       - name: "Run DB migrations"
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-        run: . .env/development ; ssh -i ./ssh_key ec2-user@${BASTION_HOST} -C 'export ZOMBI_DB_URL="${ZOMBI_DB_URL}"; cd /tmp ; rm -rf zombi-backend; git clone --branch ${{ env.BRANCH_NAME }} https://github.com/${{ github.repository }}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate ; rm -rf zombi-backend'
+        # run: . .env/development ; ssh -i ./ssh_key ec2-user@${BASTION_HOST} -C 'export ZOMBI_DB_URL="${ZOMBI_DB_URL}"; cd /tmp ; rm -rf zombi-backend; git clone --branch ${{ env.BRANCH_NAME }} https://github.com/${{ github.repository }}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate ; rm -rf zombi-backend'
+        run: . .env/development ; ssh -i ./ssh_key ec2-user@${BASTION_HOST} -C 'export ZOMBI_DB_URL="${ZOMBI_DB_URL}"; cd /tmp ; rm -rf ${{ github.repository }}; git clone --branch ${{ env.BRANCH_NAME }} https://github.com/${{ github.repository }}.git ; cd ${{ github.repository }}/migrations/; sudo -E ./migrations.sh migrate ; rm -rf ${{ github.repository }}'
       - name: Deploying code for lambdas
         run: . .env/development ; bash ./deploy.sh

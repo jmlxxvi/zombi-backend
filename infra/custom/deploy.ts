@@ -14,8 +14,6 @@ import config from "../config";
     const keyPairName = config.key.name;
     const keyPairFile = `${keyFilesDir}/${keyPairName}.pem`
 
-    const envVarsName = config.envs.name;
-    // const envVarsFile = `${CDKOUT}/${envVarsName}.txt`
     const envVarsDir = join(__dirname, "../../.env");
     const envVarsLocalFile = `${envVarsDir}/local`;
     const envVarsContextFile = `${envVarsDir}/${config.context}`;

@@ -18,9 +18,6 @@ const reactorToken = passwordGenerator();
 
 const config = {
     context,
-    envs: {
-        name: prefix("env-vars"),
-    },
     s3: {
         code: {
             name: prefix("code-bucket"),
