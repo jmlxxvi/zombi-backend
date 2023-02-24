@@ -9,7 +9,7 @@ jobs:
 
     runs-on: ubuntu-20.04
     env:
-      MYSECRET: ${{ secrets.MYSECRET2 }}
+      MYSECRET2: ${{ secrets.MYSECRET2 }}
     steps:
       - name: Test Env Vars
         run: |
