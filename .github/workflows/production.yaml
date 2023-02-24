@@ -5,8 +5,6 @@ on:
       - master
 jobs:
   testing_job:
-    environment: local
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-20.04
     env:
       LOCAL_ENV: ${{ secrets.LOCAL_ENV }}
@@ -67,22 +65,21 @@ jobs:
         with:
           node-version: 18.x
       - name: Creates the environment file
-        run: mkdir .env ; printf "%s" "$PRODUCTION_ENV" > ".env/development"
+        run: mkdir .env ; printf "%s" "$PRODUCTION_ENV" > ".env/production"
       - name: Install dependencies
         run: npm i
       - name: "Create SSH key from secret"
         run: |
+          . .env/production
           mkdir ~/.ssh
-          ssh-keyscan -H ${{ secrets.BASTION_HOST }} >> ~/.ssh/known_hosts
-          echo "${{ secrets.BASTION_SSH_KEY }}" > ssh_key
+          ssh-keyscan -H ${BASTION_HOST} >> ~/.ssh/known_hosts
+          echo "${BASTION_SSH_KEY}" > ssh_key
           chmod 600 ./ssh_key
       - name: "Setting ZOMBI_DB_URL env"
-        run: . .env/development ; echo "ZOMBI_DB_URL=${ZOMBI_DB_URL}" ; echo "ZOMBI_DB_URL=${ZOMBI_DB_URL}" >> $GITHUB_ENV
+        run: . .env/production ; echo "ZOMBI_DB_URL=${ZOMBI_DB_URL}" ; echo "ZOMBI_DB_URL=${ZOMBI_DB_URL}" >> $GITHUB_ENV
       - name: "Run DB migrations"
-        run: . .env/development ; ssh -i ./ssh_key ec2-user@${{ secrets.BASTION_HOST }} -C 'export ZOMBI_DB_URL="${{ env.ZOMBI_DB_URL }}"; rm -rf zombi-backend; git clone https://github.com/${{github.repository}}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate'
-      - name: Deploying code for lambdas
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-        run: . .env/development ; bash ./deploy.sh
+          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+        run: . .env/production ; ssh -i ./ssh_key ec2-user@${{ secrets.BASTION_HOST }} -C 'export ZOMBI_DB_URL="${{ env.ZOMBI_DB_URL }}"; rm -rf zombi-backend; git clone https://github.com/${{github.repository}}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate'
+      - name: Deploying code for lambdas
+        run: . .env/production ; bash ./deploy.sh

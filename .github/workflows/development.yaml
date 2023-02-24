@@ -3,14 +3,13 @@ on:
   push:
     branches:
       - "*"
-      # - "!master"
+      - "!master"
 env:
   CI: true
   EXCHANGE_OMS_ID: 1
   ISOLATE: true
 jobs:
   testing_job:
-    # environment: local
     runs-on: ubuntu-20.04
     env:
       LOCAL_ENV: ${{ secrets.LOCAL_ENV }}
@@ -42,12 +41,6 @@ jobs:
           node-version: 18.x
       - name: Creates the environment file
         run: mkdir .env ; printf "%s" "$LOCAL_ENV" > ".env/local"
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: art
-          path: |
-            .env/local
       - name: Install dependencies
         run: npm i
       - name: "Run DB migrations"
@@ -61,7 +54,6 @@ jobs:
       - name: Run tests
         run: . .env/local ; npm run test
   deploy_job:
-    # environment: development
     needs: testing_job
     runs-on: ubuntu-20.04
     env:
@@ -79,11 +71,6 @@ jobs:
         run: mkdir .env ; printf "%s" "$DEVELOPMENT_ENV" > ".env/development"
       - name: Install dependencies
         run: npm i
-      # - name: "Setting $GITHUB_ENV"
-      #   run: |
-      #     . .env/development ; echo "ZOMBI_DB_URL=${ZOMBI_DB_URL}" >> $GITHUB_ENV
-      #     . .env/development ; echo "BASTION_HOST=${BASTION_HOST}" >> $GITHUB_ENV
-      #     . .env/development ; echo "BASTION_SSH_KEY=${BASTION_SSH_KEY}" >> $GITHUB_ENV
       - name: "Create SSH key from secret"
         run: |
           . .env/development
@@ -91,14 +78,9 @@ jobs:
           ssh-keyscan -H ${BASTION_HOST} >> ~/.ssh/known_hosts
           echo "${BASTION_SSH_KEY}" > ssh_key
           chmod 600 ./ssh_key
-
       - name: "Run DB migrations"
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
         run: . .env/development ; ssh -i ./ssh_key ec2-user@${BASTION_HOST} -C 'export ZOMBI_DB_URL="${ZOMBI_DB_URL}"; cd /tmp ; rm -rf zombi-backend; git clone --branch ${{ env.BRANCH_NAME }} https://github.com/${{ github.repository }}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate ; rm -rf zombi-backend'
       - name: Deploying code for lambdas
-        # env:
-        #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        #   AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
         run: . .env/development ; bash ./deploy.sh

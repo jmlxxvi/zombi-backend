@@ -64,21 +64,3 @@ sodium.ready.then(async () => {
     console.log(`Secrets created`);
 
 });
-
-/* 
-
-    await octokit.request('PUT /repos/{owner}/{repo}/environments/{environment_name}', { environment_name: 'local', owner, repo, headers });
-    await octokit.request('PUT /repos/{owner}/{repo}/environments/{environment_name}', { environment_name: config.context, owner, repo, headers });
-
-
-    await octokit.request('PUT /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}', {
-        repository_id,
-        environment_name: 'local',
-        secret_name: 'LOCAL_ENV',
-        // encrypted_value: encrypt(key, readFileSync(envVarsLocalFile).toString()),
-        encrypted_value: r,
-        key_id,
-        headers
-    });
-
-*/
