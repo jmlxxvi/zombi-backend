@@ -2,7 +2,7 @@ name: Testing Secrets via API
 on:
   push:
     branches:
-      - "*"
+      - "xxxx"
 jobs:
   testing_job:
     # environment: local
