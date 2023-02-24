@@ -6,6 +6,7 @@ on:
 jobs:
   testing_job:
     # environment: local
+
     runs-on: ubuntu-20.04
     env:
       MYSECRET: ${{ secrets.MYSECRET2 }}
