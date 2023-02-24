@@ -32,9 +32,18 @@ function encrypt(key: string, secret: string) {
 
     // await octokit.request('PUT /repos/{owner}/{repo}/environments/{environment_name}', { environment_name: 'local', owner, repo, headers });
 
-    const response = await octokit.request('PUT /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}', {
-        repository_id,
-        environment_name: 'local',
+    // const response = await octokit.request('PUT /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}', {
+    //     repository_id,
+    //     environment_name: 'local',
+    //     secret_name: 'MYSECRET',
+    //     encrypted_value: encrypt(key, "HERE_I_AM"),
+    //     key_id,
+    //     headers
+    // });
+
+    const response = await octokit.request('PUT /repos/{owner}/{repo}/actions/secrets/{secret_name}', {
+        owner,
+        repo,
         secret_name: 'MYSECRET',
         encrypted_value: encrypt(key, "HERE_I_AM"),
         key_id,
