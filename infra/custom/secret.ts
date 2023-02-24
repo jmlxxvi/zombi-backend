@@ -44,7 +44,7 @@ function encrypt(key: string, secret: string) {
     const response = await octokit.request('PUT /repos/{owner}/{repo}/actions/secrets/{secret_name}', {
         owner,
         repo,
-        secret_name: 'MYSECRET',
+        secret_name: 'MYSECRET2',
         encrypted_value: encrypt(key, "HERE_I_AM"),
         key_id,
         headers
