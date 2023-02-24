@@ -95,7 +95,7 @@ jobs:
       - name: "Run DB migrations"
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-        run: . .env/development ; ssh -i ./ssh_key ec2-user@${{ env.BASTION_HOST }} -C 'export ZOMBI_DB_URL="${{ env.ZOMBI_DB_URL }}"; cd /tmp ; rm -rf zombi-backend; git clone --branch ${{ env.BRANCH_NAME }} https://github.com/${{github.repository}}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate ; rm -rf zombi-backend'
+        run: . .env/development ; ssh -i ./ssh_key ec2-user@${BASTION_HOST} -C 'export ZOMBI_DB_URL="${ZOMBI_DB_URL}"; cd /tmp ; rm -rf zombi-backend; git clone --branch ${{ env.BRANCH_NAME }} https://github.com/${{ github.repository }}.git ; cd zombi-backend/migrations/; sudo -E ./migrations.sh migrate ; rm -rf zombi-backend'
       - name: Deploying code for lambdas
         # env:
         #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
